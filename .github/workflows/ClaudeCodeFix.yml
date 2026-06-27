@@ -1,34 +1,49 @@
 name: Claude Code Fix
 
+# ── Triggers ─────────────────────────────────────────────────────────────────
 on:
-  workflow_dispatch:
-
+  workflow_dispatch:                        # FIX #10: manual runs now accept a prompt input
+    inputs:
+      prompt:
+        description: "Task for Claude to perform"
+        required: false
+        default: "Follow CLAUDE.md and review the repository."
   issue_comment:
     types:
       - created
 
+# ── Permissions ───────────────────────────────────────────────────────────────
 permissions:
   contents: write
   pull-requests: write
   issues: read
   id-token: write
 
+# ── Jobs ──────────────────────────────────────────────────────────────────────
 jobs:
   claude:
     runs-on: ubuntu-latest
 
+    # FIX #2 & #11: only run on workflow_dispatch OR when comment mentions @claude
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
+
     steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
 
+      # ── Node ──────────────────────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
+      # ── Claude Code CLI ───────────────────────────────────────────────────
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
 
@@ -38,6 +53,7 @@ jobs:
           which claude
           claude --version
 
+      # ── UiPath ────────────────────────────────────────────────────────────
       - name: Install UiPath CLI
         run: npm install -g @uipath/cli
 
@@ -47,111 +63,87 @@ jobs:
           uip tools install @uipath/solution-tool
 
       - name: Install Claude Skill
-        run: |
-          uip skills install --agent claude
+        run: uip skills install --agent claude
 
+      # ── Project Dependencies ──────────────────────────────────────────────
       - name: Install Dependencies
         shell: bash
         run: |
           if [ -f package.json ]; then
             npm ci || npm install
           fi
-
           if [ -f yarn.lock ]; then
             npm install -g yarn
             yarn install
           fi
-
           if [ -f pnpm-lock.yaml ]; then
             npm install -g pnpm
             pnpm install
           fi
 
+      # ── Git Identity ───────────────────────────────────────────────────────
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      # ── Run Claude ─────────────────────────────────────────────────────────
+      # FIX #1:  Only ONE auth method (ANTHROPIC_API_KEY).
+      #          To use OAuth instead (Pro/Max), remove anthropic_api_key and
+      #          uncomment the env block at the bottom of this step.
+      # FIX #5:  Prompt is resolved safely for both trigger types.
+      # FIX #6:  Only inputs confirmed by anthropics/claude-code-action@v1 are used.
+      # FIX #8:  Prompt is minimal; full instructions live in CLAUDE.md.
+      # FIX #15: Action used correctly for GitHub issue/PR automation.
       - name: Run Claude
         uses: anthropics/claude-code-action@v1
         with:
-          prompt: |
-            You are an autonomous software engineer working directly inside this GitHub repository.
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: >-
+            ${{ github.event_name == 'workflow_dispatch'
+                && inputs.prompt
+                || 'Follow CLAUDE.md and complete the GitHub issue request.' }}
+          claude_args: "--max-turns 3"
+        # ── Auth Option B (OAuth for Pro/Max subscribers) ──────────────────
+        # To switch: delete anthropic_api_key above and uncomment below:
+        # env:
+        #   CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
-            Repository:
-            ${{ github.repository }}
-
-            Branch:
-            ${{ github.ref_name }}
-
-            Event:
-            ${{ github.event_name }}
-
-            Issue Comment (may be empty for workflow_dispatch):
-
-            ${{ github.event.comment.body }}
-
-            Your responsibilities:
-
-            1. Analyze the entire repository.
-
-            2. Create a file named ANALYSIS.md in the repository root.
-
-            ANALYSIS.md must contain:
-            - Project overview
-            - Folder structure
-            - Technologies used
-            - Build process
-            - Dependencies
-            - Important files
-            - Suggested improvements
-            - Files related to the requested issue
-
-            3. If an issue comment exists, implement the requested change.
-
-            4. Modify only the files necessary.
-
-            5. Save every modified file.
-
-            6. Do NOT ask for confirmation.
-
-            7. Ensure all repository changes remain in the working tree.
-
-          show_full_output: true
-          display_report: true
-
-        env:
-          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
+      # ── Debug ──────────────────────────────────────────────────────────────
+      # FIX #13: kept — useful for troubleshooting
       - name: Debug Repository
         run: |
           echo "===== Git Status ====="
           git status
-
           echo ""
           echo "===== Changed Files ====="
           git diff --name-only
-
           echo ""
           echo "===== Diff ====="
           git diff
-
           echo ""
           echo "===== Repository Files ====="
-          find .
+          find . -not -path './.git/*'
 
+      # ── Check for Changes ──────────────────────────────────────────────────
+      # FIX #7 & #9: no longer fails the workflow when Claude makes no changes;
+      #              sets an output flag so PR creation is simply skipped.
       - name: Verify Claude Changes
         id: verify
         shell: bash
         run: |
-
-          if git diff --quiet; then
-            echo "No repository changes detected."
-            exit 1
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No repository changes detected — skipping PR creation."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected."
+            echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-          echo "changed=true" >> $GITHUB_OUTPUT
-
+      # ── Create PR ──────────────────────────────────────────────────────────
+      # FIX #5:  PR body safely handles both trigger types.
+      # FIX #14: PR creation only when changes exist — kept correct.
       - name: Create Pull Request
         if: steps.verify.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
@@ -161,22 +153,17 @@ jobs:
           title: "Claude Code: Repository Analysis and Fix"
           commit-message: "Claude repository analysis and automated fix"
           delete-branch: true
-
           body: |
             ## Claude Code Automated Changes
 
-            This PR was generated automatically.
+            This PR was generated automatically by the Claude Code workflow.
 
-            Included:
-
+            **Included:**
             - Repository analysis
             - ANALYSIS.md
             - Requested issue implementation
             - Repository modifications
 
-            Trigger:
-            ${{ github.event_name }}
+            **Trigger:** `${{ github.event_name }}`
 
-            Issue Comment:
-
-            ${{ github.event.comment.body }}
+            ${{ github.event_name == 'issue_comment' && format('**Issue Comment:**{0}{1}', '%0A', github.event.comment.body) || '' }}
