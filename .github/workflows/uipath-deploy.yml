@@ -26,14 +26,22 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr = await github.rest.pulls.get({
-              owner:       context.repo.owner,
-              repo:        context.repo.repo,
-              pull_number: context.issue.number
+            // Fetch the most recent open PR (desc order = latest first)
+            const { data: prs } = await github.rest.pulls.list({
+              owner:     context.repo.owner,
+              repo:      context.repo.repo,
+              state:     'open',
+              sort:      'created',
+              direction: 'desc',
+              per_page:  1
             });
-            core.setOutput('pr_number', pr.data.number);
-            core.setOutput('head_ref',  pr.data.head.ref);
-            console.log(`PR #${pr.data.number} from branch: ${pr.data.head.ref}`);
+            if (prs.length === 0) {
+              core.setFailed('No open pull requests found.');
+            }
+            const pr = prs[0];
+            core.setOutput('pr_number', pr.number);
+            core.setOutput('head_ref',  pr.head.ref);
+            console.log(`Latest open PR #${pr.number} from branch: ${pr.head.ref}`);
 
   # ─────────────────────────────────────────────────────────────
   # JOB 2 — Merge the PR into main
