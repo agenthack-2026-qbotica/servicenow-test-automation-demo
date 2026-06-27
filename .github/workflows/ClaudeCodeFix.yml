@@ -102,7 +102,7 @@ jobs:
             7. Recommendations - suggested improvements
 
             Write the file, then commit it with message: "docs: add ANALYSIS.md project analysis"
-          claude_args: "--max-turns 20"
+          claude_args: "--max-turns 50 --permission-mode bypassPermissions"
 
       # ── Debug ──────────────────────────────────────────────────────────────
       - name: Debug Repository
