@@ -10,7 +10,7 @@ on:
 jobs:
 
   # ─────────────────────────────────────────────────────────────
-  # JOB 1 — Gate: validate comment contains "merge"
+  # JOB 1 — Gate: validate comment contains "merge", get PR branch
   # ─────────────────────────────────────────────────────────────
   check-comment:
     name: Check Comment Trigger
@@ -38,63 +38,41 @@ jobs:
             const pr = prs[0];
             core.setOutput('pr_number', pr.number);
             core.setOutput('head_ref',  pr.head.ref);
-            console.log(`Latest open PR #${pr.number} from branch: ${pr.head.ref}`);
+            console.log(`Latest open PR #${pr.number} — branch: ${pr.head.ref}`);
 
   # ─────────────────────────────────────────────────────────────
-  # JOB 2 — Merge the PR into master
-  # ─────────────────────────────────────────────────────────────
-  merge-pr:
-    name: Merge PR into master
-    needs: check-comment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Merge pull request
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.rest.pulls.merge({
-              owner:        context.repo.owner,
-              repo:         context.repo.repo,
-              pull_number:  ${{ needs.check-comment.outputs.pr_number }},
-              merge_method: 'squash'
-            });
-            console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into master.');
-
-  # ─────────────────────────────────────────────────────────────
-  # JOB 3 — Pack & Publish to UiPath Orchestrator
+  # JOB 2 — Pack & Publish from PR branch
   #
-  # PACK:    dotnet tool (UiPath.CLI.Windows) → uipcli package pack
-  # PUBLISH: Orchestrator REST API via curl + PAT as Bearer token
-  #          POST /odata/Processes/UiPath.Server.Configuration.OData.UploadPackage
-  #          Auth: Authorization: Bearer <UIPATH_PAT>   ← PAT used directly, no exchange needed
+  # Checkout PR branch → bump version → pack → publish to Orchestrator
+  # If publish succeeds → Job 3 merges to master
   # ─────────────────────────────────────────────────────────────
   package-and-publish:
     name: Package & Publish to Orchestrator
-    needs: [check-comment, merge-pr]
-    runs-on: windows-latest            # Windows required for UiPath.CLI.Windows pack
+    needs: check-comment
+    runs-on: windows-latest
 
     env:
-      UIPATH_CLI_VERSION: "25.10.21"   # UiPath.CLI.Windows on NuGet — confirmed latest
+      UIPATH_CLI_VERSION: "25.10.21"
       PROJECT_PATH:       "."
       OUTPUT_PATH:        "${{ github.workspace }}\\output"
+      PR_BRANCH:          ${{ needs.check-comment.outputs.head_ref }}
 
       # ── All from GitHub Secrets ──────────────────────────────
-      UIPATH_ORCH_URL:    ${{ secrets.UIPATH_ORCH_URL }}   # https://cloud.uipath.com
-      UIPATH_ORG:         ${{ secrets.UIPATH_ORG }}         # your org name in URL
-      UIPATH_TENANT:      ${{ secrets.UIPATH_TENANT }}      # your tenant name in URL
-      UIPATH_FOLDER:      ${{ secrets.UIPATH_FOLDER }}      # Orchestrator folder name
-      UIPATH_PAT:         ${{ secrets.UIPATH_PAT }}         # pt0_xxx — used as Bearer token
+      UIPATH_ORCH_URL:    ${{ secrets.UIPATH_ORCH_URL }}
+      UIPATH_ORG:         ${{ secrets.UIPATH_ORG }}
+      UIPATH_TENANT:      ${{ secrets.UIPATH_TENANT }}
+      UIPATH_FOLDER:      ${{ secrets.UIPATH_FOLDER }}
+      UIPATH_PAT:         ${{ secrets.UIPATH_PAT }}
 
     steps:
 
-      # 1. Checkout master after merge
-      - name: Checkout master branch
+      # 1. Checkout PR branch (not master)
+      - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
-          ref: master
+          ref: ${{ needs.check-comment.outputs.head_ref }}
           fetch-depth: 0
-          persist-credentials: true   # required for git push back to master
+          persist-credentials: true
 
       # 2. Cache dotnet tool install
       - name: Cache UiPath CLI dotnet tool
@@ -104,7 +82,7 @@ jobs:
           path: $HOME/.dotnet/tools
           key: uipath-cli-${{ env.UIPATH_CLI_VERSION }}
 
-      # 3. Install UiPath.CLI.Windows via dotnet tool (if not cached)
+      # 3. Install UiPath.CLI.Windows (if not cached)
       - name: Install UiPath CLI
         if: steps.cache-cli.outputs.cache-hit != 'true'
         shell: powershell
@@ -125,50 +103,42 @@ jobs:
         shell: powershell
         run: New-Item -ItemType Directory -Force -Path "$env:OUTPUT_PATH" | Out-Null
 
-      # 6. Read version from project.json and auto-increment patch (1.0.0 → 1.0.1)
+      # 6. Read version from project.json on PR branch and auto-increment patch
       - name: Derive package version
         shell: powershell
         run: |
           $projectJson = Get-Content "$env:PROJECT_PATH\project.json" -Raw | ConvertFrom-Json
           $ver = $projectJson.projectVersion
-          if (-not $ver) {
-            Write-Error "projectVersion not found in project.json!"
-            exit 1
-          }
-          # Split into major.minor.patch and increment patch by 1
+          if (-not $ver) { Write-Error "projectVersion not found in project.json!"; exit 1 }
           $parts = $ver -split '\.'
           if ($parts.Count -ge 3) {
             $parts[2] = [int]$parts[2] + 1
             $newVer = $parts -join '.'
           } else {
-            $newVer = $ver  # fallback: use as-is if format unexpected
+            $newVer = $ver
           }
-          Write-Host "project.json version : $ver"
-          Write-Host "Publishing version   : $newVer"
+          Write-Host "PR branch version  : $ver"
+          Write-Host "Publishing version : $newVer"
           "PACKAGE_VERSION=$newVer" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      # 7. Write incremented version back to project.json and commit to master
-      - name: Update project.json version and commit
+      # 7. Write new version back to project.json and commit to PR branch
+      - name: Update project.json and commit to PR branch
         shell: powershell
         run: |
-          # Read, update, write back project.json
           $projectJsonPath = "$env:PROJECT_PATH\project.json"
           $projectJson = Get-Content $projectJsonPath -Raw | ConvertFrom-Json
           $projectJson.projectVersion = $env:PACKAGE_VERSION
           $projectJson | ConvertTo-Json -Depth 100 | Set-Content $projectJsonPath -Encoding UTF8
-          Write-Host "project.json updated to version: $env:PACKAGE_VERSION"
+          Write-Host "project.json updated to: $env:PACKAGE_VERSION"
 
-          # Configure git identity for the commit
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Stage, commit and push back to master
           git add "$projectJsonPath"
           git commit -m "chore: bump version to $env:PACKAGE_VERSION [skip ci]"
-          git push origin master
-          Write-Host "project.json committed and pushed to master."
+          git push origin $env:PR_BRANCH
+          Write-Host "Committed and pushed to PR branch: $env:PR_BRANCH"
 
-      # 8. Pack the UiPath project → produces .nupkg in OUTPUT_PATH
+      # 8. Pack from PR branch
       - name: Pack UiPath project
         shell: powershell
         run: |
@@ -176,17 +146,11 @@ jobs:
             --output "$env:OUTPUT_PATH" `
             --version "$env:PACKAGE_VERSION" `
             --autoVersion false `
-            --disableBuiltInNugetFeeds `
             --skipValidate
           if ($LASTEXITCODE -ne 0) { Write-Error "Pack failed!"; exit 1 }
           Write-Host "Pack complete."
 
-      # 9. Publish .nupkg to Orchestrator via REST API using PAT as Bearer token
-      #
-      #    Endpoint: POST /odata/Processes/UiPath.Server.Configuration.OData.UploadPackage
-      #    Auth:     Authorization: Bearer <PAT>   ← PAT used directly, no token exchange
-      #    Folder:   X-UIPATH-FolderPath header
-      #
+      # 9. Publish to Orchestrator via REST API (PAT as Bearer)
       - name: Publish to Orchestrator via API
         shell: powershell
         run: |
@@ -197,17 +161,15 @@ jobs:
           $baseUrl   = $env:UIPATH_ORCH_URL.TrimEnd("/")
           $uploadUrl = "$baseUrl/$env:UIPATH_ORG/$env:UIPATH_TENANT/orchestrator_/odata/Processes/UiPath.Server.Configuration.OData.UploadPackage"
 
-          # curl is available on Windows runners — use full URL, no leading slash (avoids Git bash path rewrite)
           $response = curl.exe -s -w "`n%{http_code}" `
             -X POST "$uploadUrl" `
             -H "Authorization: Bearer $env:UIPATH_PAT" `
             -H "X-UIPATH-FolderPath: $env:UIPATH_FOLDER" `
             -F "file=@'$($nupkg.FullName)'"
 
-          # Split body and status code
-          $lines     = $response -split "`n"
-          $httpCode  = $lines[-1].Trim()
-          $body      = ($lines[0..($lines.Count - 2)]) -join "`n"
+          $lines    = $response -split "`n"
+          $httpCode = $lines[-1].Trim()
+          $body     = ($lines[0..($lines.Count - 2)]) -join "`n"
 
           Write-Host "HTTP Status: $httpCode"
           Write-Host "Response:    $body"
@@ -218,7 +180,7 @@ jobs:
           }
           Write-Host "Package published successfully to Orchestrator."
 
-      # 10. Upload .nupkg as GitHub Actions artifact (audit trail)
+      # 10. Upload nupkg as artifact
       - name: Upload nupkg artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -227,15 +189,14 @@ jobs:
           path: ${{ env.OUTPUT_PATH }}\*.nupkg
           retention-days: 30
 
-      # 11. Post result comment on the PR
-      #     PR number  → from comment trigger (needs.check-comment.outputs.pr_number)
-      #     All others → from secrets via step-level env
+      # 11. Comment result on PR
       - name: Comment result on PR
         if: always()
         shell: bash
         env:
           GH_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER:   ${{ needs.check-comment.outputs.pr_number }}
+          PR_BRANCH:   ${{ needs.check-comment.outputs.head_ref }}
           PKG_VERSION: ${{ env.PACKAGE_VERSION }}
           ORCH_ORG:    ${{ secrets.UIPATH_ORG }}
           ORCH_TENANT: ${{ secrets.UIPATH_TENANT }}
@@ -251,31 +212,31 @@ jobs:
           COMMIT_URL="${SERVER_URL}/${REPO}/commit/${SHA}"
 
           if [ "$JOB_STATUS" = "success" ]; then
-            BODY="## ✅ UiPath Publish Succeeded
+            BODY="## ✅ UiPath Publish Succeeded — Merging to master
 
           | Field            | Value |
           |------------------|-------|
           | **PR**           | #${PR_NUMBER} |
-          | **Branch**       | \`master\` (merged) |
+          | **Branch**       | \`${PR_BRANCH}\` |
           | **Commit**       | [\`${SHORT_SHA}\`](${COMMIT_URL}) |
           | **Package**      | \`${PKG_VERSION}.nupkg\` |
           | **Orchestrator** | ${ORCH_ORG} / ${ORCH_TENANT} |
           | **Folder**       | \`${ORCH_FOLDER}\` |
           | **Run**          | [View workflow run](${RUN_URL}) |
 
-          > 🤖 Triggered by comment on PR #${PR_NUMBER}. Package is live in Orchestrator."
+          > 🤖 Package published. Merging PR #${PR_NUMBER} to master now..."
           else
-            BODY="## ❌ UiPath Publish Failed
+            BODY="## ❌ UiPath Publish Failed — PR NOT merged
 
           | Field        | Value |
           |--------------|-------|
           | **PR**       | #${PR_NUMBER} |
-          | **Branch**   | \`master\` |
+          | **Branch**   | \`${PR_BRANCH}\` |
           | **Commit**   | [\`${SHORT_SHA}\`](${COMMIT_URL}) |
           | **Package**  | \`${PKG_VERSION}.nupkg\` |
           | **Run**      | [View workflow run](${RUN_URL}) |
 
-          > ⚠️ Check the workflow run logs for details. Package was **not** published to Orchestrator."
+          > ⚠️ Publish failed — PR was **not** merged. Fix the issue and comment \`merge\` again."
           fi
 
           curl -s -X POST \
@@ -283,3 +244,24 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments" \
             -d "$(jq -n --arg body "$BODY" '{body: $body}')"
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 3 — Merge PR to master ONLY if publish succeeded
+  # ─────────────────────────────────────────────────────────────
+  merge-pr:
+    name: Merge PR into master
+    needs: package-and-publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge pull request
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.pulls.merge({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              pull_number:  ${{ needs.check-comment.outputs.pr_number }},
+              merge_method: 'squash'
+            });
+            console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into master.');
