@@ -175,7 +175,9 @@ jobs:
           uipcli package pack "$env:PROJECT_PATH\project.json" `
             --output "$env:OUTPUT_PATH" `
             --version "$env:PACKAGE_VERSION" `
-            --autoVersion false
+            --autoVersion false `
+            --disableBuiltInNugetFeeds `
+            --skipValidate
           if ($LASTEXITCODE -ne 0) { Write-Error "Pack failed!"; exit 1 }
           Write-Host "Pack complete."
 
