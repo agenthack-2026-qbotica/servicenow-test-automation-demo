@@ -13,6 +13,7 @@ permissions:
   pull-requests: write
   issues: write
   id-token: write
+  actions: read       # Required for Claude to read CI results
 
 # ── Jobs ──────────────────────────────────────────────────────────────────────
 jobs:
@@ -101,7 +102,7 @@ jobs:
             6. Known Issues / Observations - anything missing, inconsistent, or worth noting
             7. Recommendations - suggested improvements
 
-            Write the file, then commit it with message: "docs: add ANALYSIS.md project analysis"
+            Write the file only. Do NOT run git commit or git push.
           claude_args: "--max-turns 50 --permission-mode bypassPermissions"
 
       # ── Debug ──────────────────────────────────────────────────────────────
@@ -124,7 +125,7 @@ jobs:
         id: verify
         shell: bash
         run: |
-          if git diff --quiet && git diff --staged --quiet; then
+          if git diff --quiet && git diff --staged --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
             echo "No repository changes detected — skipping PR creation."
             echo "changed=false" >> $GITHUB_OUTPUT
           else
