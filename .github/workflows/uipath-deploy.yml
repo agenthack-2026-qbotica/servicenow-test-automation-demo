@@ -94,6 +94,7 @@ jobs:
         with:
           ref: master
           fetch-depth: 0
+          persist-credentials: true   # required for git push back to master
 
       # 2. Cache dotnet tool install
       - name: Cache UiPath CLI dotnet tool
@@ -124,24 +125,50 @@ jobs:
         shell: powershell
         run: New-Item -ItemType Directory -Force -Path "$env:OUTPUT_PATH" | Out-Null
 
-      # 6. Derive version: git tag or date.shortSHA
+      # 6. Read version from project.json and auto-increment patch (1.0.0 → 1.0.1)
       - name: Derive package version
         shell: powershell
         run: |
-          # Suppress both stderr and exit code — repo may have no tags
-          $tag = git describe --tags --abbrev=0 2>&1
-          if ($LASTEXITCODE -eq 0 -and $tag -notmatch 'fatal') {
-            $ver = $tag.ToString().TrimStart('v')
-          } else {
-            $sha  = "${{ github.sha }}".Substring(0, 7)
-            $date = Get-Date -Format "yyyy.M.d"
-            $ver  = "$date.$sha"
+          $projectJson = Get-Content "$env:PROJECT_PATH\project.json" -Raw | ConvertFrom-Json
+          $ver = $projectJson.projectVersion
+          if (-not $ver) {
+            Write-Error "projectVersion not found in project.json!"
+            exit 1
           }
-          $global:LASTEXITCODE = 0  # reset so step doesn't fail
-          Write-Host "Package version: $ver"
-          "PACKAGE_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
+          # Split into major.minor.patch and increment patch by 1
+          $parts = $ver -split '\.'
+          if ($parts.Count -ge 3) {
+            $parts[2] = [int]$parts[2] + 1
+            $newVer = $parts -join '.'
+          } else {
+            $newVer = $ver  # fallback: use as-is if format unexpected
+          }
+          Write-Host "project.json version : $ver"
+          Write-Host "Publishing version   : $newVer"
+          "PACKAGE_VERSION=$newVer" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      # 7. Pack the UiPath project → produces .nupkg in OUTPUT_PATH
+      # 7. Write incremented version back to project.json and commit to master
+      - name: Update project.json version and commit
+        shell: powershell
+        run: |
+          # Read, update, write back project.json
+          $projectJsonPath = "$env:PROJECT_PATH\project.json"
+          $projectJson = Get-Content $projectJsonPath -Raw | ConvertFrom-Json
+          $projectJson.projectVersion = $env:PACKAGE_VERSION
+          $projectJson | ConvertTo-Json -Depth 100 | Set-Content $projectJsonPath -Encoding UTF8
+          Write-Host "project.json updated to version: $env:PACKAGE_VERSION"
+
+          # Configure git identity for the commit
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stage, commit and push back to master
+          git add "$projectJsonPath"
+          git commit -m "chore: bump version to $env:PACKAGE_VERSION [skip ci]"
+          git push origin master
+          Write-Host "project.json committed and pushed to master."
+
+      # 8. Pack the UiPath project → produces .nupkg in OUTPUT_PATH
       - name: Pack UiPath project
         shell: powershell
         run: |
@@ -152,7 +179,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { Write-Error "Pack failed!"; exit 1 }
           Write-Host "Pack complete."
 
-      # 8. Publish .nupkg to Orchestrator via REST API using PAT as Bearer token
+      # 9. Publish .nupkg to Orchestrator via REST API using PAT as Bearer token
       #
       #    Endpoint: POST /odata/Processes/UiPath.Server.Configuration.OData.UploadPackage
       #    Auth:     Authorization: Bearer <PAT>   ← PAT used directly, no token exchange
@@ -189,7 +216,7 @@ jobs:
           }
           Write-Host "Package published successfully to Orchestrator."
 
-      # 9. Upload .nupkg as GitHub Actions artifact (audit trail)
+      # 10. Upload .nupkg as GitHub Actions artifact (audit trail)
       - name: Upload nupkg artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -198,7 +225,7 @@ jobs:
           path: ${{ env.OUTPUT_PATH }}\*.nupkg
           retention-days: 30
 
-      # 10. Post result comment on the PR
+      # 11. Post result comment on the PR
       #     PR number  → from comment trigger (needs.check-comment.outputs.pr_number)
       #     All others → from secrets via step-level env
       - name: Comment result on PR
