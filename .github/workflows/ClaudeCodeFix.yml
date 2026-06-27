@@ -1,13 +1,11 @@
 name: Claude Code Fix
 
-# ── Triggers ─────────────────────────────────────────────────────────────────
 on:
   workflow_dispatch:
   issue_comment:
     types:
       - created
 
-# ── Permissions ───────────────────────────────────────────────────────────────
 permissions:
   contents: write
   pull-requests: write
@@ -15,7 +13,6 @@ permissions:
   id-token: write
   actions: read
 
-# ── Jobs ──────────────────────────────────────────────────────────────────────
 jobs:
   claude:
     runs-on: ubuntu-latest
@@ -76,80 +73,77 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      # ── Build Prompt ───────────────────────────────────────────────────────
-      - name: Build Prompt
-        id: build_prompt
+      # ── Build Prompt (issue_comment) ───────────────────────────────────────
+      # Uses GitHub Actions multiline env var syntax: EOF delimiter
+      - name: Build Prompt (issue comment)
+        if: github.event_name == 'issue_comment'
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" = "issue_comment" ]; then
-            COMMENT='${{ github.event.comment.body }}'
-            TASK="${COMMENT/@claude/}"
-            TASK="${TASK#"${TASK%%[![:space:]]*}"}"
+          COMMENT='${{ github.event.comment.body }}'
+          TASK="${COMMENT/@claude/}"
+          TASK="${TASK#"${TASK%%[![:space:]]*}"}"
 
-            cat >> $GITHUB_ENV << 'PROMPT'
-          PROMPT=You are an expert UiPath RPA developer and test automation engineer.
+          {
+            echo "CLAUDE_PROMPT<<EOF"
+            echo "You are an expert UiPath RPA developer and test automation engineer."
+            echo ""
+            echo "This is a UiPath test automation project that automates ServiceNow incident"
+            echo "lifecycle testing via browser automation. Automation logic lives in XAML"
+            echo "workflows under Workflows/ and TestCases/. You have access to UiPath skills:"
+            echo "uipath-rpa, uipath-test, uipath-review, uipath-troubleshoot — use them."
+            echo ""
+            echo "ISSUE #${{ github.event.issue.number }}: ${{ github.event.issue.title }}"
+            echo ""
+            echo "ISSUE DESCRIPTION:"
+            echo "${{ github.event.issue.body }}"
+            echo ""
+            echo "USER REQUEST:"
+            echo "${TASK}"
+            echo ""
+            echo "INSTRUCTIONS:"
+            echo "1. Read the issue title, description, and user request carefully."
+            echo "2. Use UiPath skills to analyse the relevant XAML files."
+            echo "3. Identify the root cause."
+            echo "4. Implement the fix directly in the relevant XAML or config files."
+            echo "5. Create REPORT.md in the repo root with these sections:"
+            echo "   ## Issue Summary — what the issue was and root cause"
+            echo "   ## Changes Made — every file changed and what changed"
+            echo "   ## UiPath Analysis — findings from skill analysis"
+            echo "   ## Testing Notes — what to verify after the fix"
+            echo "   ## Risk Assessment — risks or side effects"
+            echo "6. Do NOT run git commit or git push."
+            echo "EOF"
+          } >> $GITHUB_ENV
 
-          This is a UiPath test automation project that automates ServiceNow incident lifecycle testing via browser automation. All automation logic is in XAML workflows under Workflows/ and test cases under TestCases/. Use the UiPath skills available to you (uipath-rpa, uipath-test, uipath-review, uipath-troubleshoot) to understand and fix the issue.
-
-          ISSUE #${{ github.event.issue.number }}: ${{ github.event.issue.title }}
-
-          ISSUE DESCRIPTION:
-          ${{ github.event.issue.body }}
-
-          USER REQUEST (from comment):
-          TASK_PLACEHOLDER
-
-          INSTRUCTIONS:
-          1. Read the issue description and user request carefully
-          2. Use UiPath skills to analyse the relevant XAML files (Workflows/ and TestCases/)
-          3. Identify the root cause of the issue
-          4. Implement the fix directly in the relevant XAML or config files
-          5. Create a file called REPORT.md in the root with these sections:
-             ## Issue Summary
-             - What the issue was and its root cause
-             ## Changes Made
-             - List every file changed and exactly what was changed
-             ## UiPath Analysis
-             - Findings from UiPath skill analysis (workflow structure, selectors, activities)
-             ## Testing Notes
-             - What to verify after the fix is applied
-             ## Risk Assessment
-             - Any risks or side effects of the change
-          6. Do NOT run git commit or git push
-
-          PROMPT
-            # Replace placeholder with actual task
-            sed -i "s|TASK_PLACEHOLDER|${TASK}|g" $GITHUB_ENV
-
-          else
-            cat >> $GITHUB_ENV << 'PROMPT'
-          PROMPT=You are an expert UiPath RPA developer and test automation engineer.
-
-          This is a UiPath test automation project that automates ServiceNow incident lifecycle testing via browser automation. All automation logic is in XAML workflows under Workflows/ and test cases under TestCases/. Use the UiPath skills available to you (uipath-rpa, uipath-test, uipath-review, uipath-troubleshoot) to analyse the entire project.
-
-          INSTRUCTIONS:
-          1. Use UiPath skills to analyse all XAML files in Workflows/ and TestCases/
-          2. Read project.json for version and dependency details
-          3. Review CLAUDE.md for project guidelines
-          4. Create ANALYSIS.md in the root with:
-             ## Project Overview
-             - Purpose, tech stack, UiPath version
-             ## Repository Structure
-             - Every folder and key file with a one-line description
-             ## Test Cases
-             - For each file in TestCases/, describe what scenario it tests
-             ## Workflows
-             - For each file in Workflows/, describe what it does
-             ## Dependencies
-             - Packages from project.json
-             ## Known Issues / Observations
-             - Anything missing, broken, or worth noting
-             ## Recommendations
-             - Suggested improvements
-          5. Do NOT run git commit or git push
-
-          PROMPT
-          fi
+      # ── Build Prompt (workflow_dispatch) ───────────────────────────────────
+      - name: Build Prompt (workflow dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          {
+            echo "CLAUDE_PROMPT<<EOF"
+            echo "You are an expert UiPath RPA developer and test automation engineer."
+            echo ""
+            echo "This is a UiPath test automation project that automates ServiceNow incident"
+            echo "lifecycle testing via browser automation. Automation logic lives in XAML"
+            echo "workflows under Workflows/ and TestCases/. You have access to UiPath skills:"
+            echo "uipath-rpa, uipath-test, uipath-review, uipath-troubleshoot — use them."
+            echo ""
+            echo "INSTRUCTIONS:"
+            echo "1. Use UiPath skills to analyse all XAML files in Workflows/ and TestCases/."
+            echo "2. Read project.json for version and dependency info."
+            echo "3. Review CLAUDE.md for project guidelines."
+            echo "4. Create ANALYSIS.md in the repo root with:"
+            echo "   ## Project Overview — purpose, tech stack, UiPath version"
+            echo "   ## Repository Structure — every folder and file with a one-line description"
+            echo "   ## Test Cases — for each file in TestCases/, what scenario it tests"
+            echo "   ## Workflows — for each file in Workflows/, what it does"
+            echo "   ## Dependencies — packages from project.json"
+            echo "   ## Known Issues / Observations — anything missing, broken, or notable"
+            echo "   ## Recommendations — suggested improvements"
+            echo "5. Do NOT run git commit or git push."
+            echo "EOF"
+          } >> $GITHUB_ENV
 
       # ── Run Claude ─────────────────────────────────────────────────────────
       - name: Run Claude
@@ -158,7 +152,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           additional_permissions: "actions: read"
-          prompt: ${{ env.PROMPT }}
+          prompt: ${{ env.CLAUDE_PROMPT }}
           claude_args: "--max-turns 50 --permission-mode bypassPermissions"
 
       # ── Debug ──────────────────────────────────────────────────────────────
@@ -169,9 +163,6 @@ jobs:
           echo ""
           echo "===== Changed Files ====="
           git diff --name-only
-          echo ""
-          echo "===== Diff ====="
-          git diff
           echo ""
           echo "===== New/Untracked Files ====="
           git ls-files --others --exclude-standard
@@ -212,10 +203,10 @@ jobs:
             |---|---|
             | **Trigger** | `${{ github.event_name }}` |
             | **Run** | `${{ github.run_id }}` |
-            ${{ github.event_name == 'issue_comment' && format('| **Issue** | #{0} {1} |', github.event.issue.number, github.event.issue.title) || '| **Task** | Repository analysis |' }}
+            ${{ github.event_name == 'issue_comment' && format('| **Issue** | #{0} — {1} |', github.event.issue.number, github.event.issue.title) || '| **Task** | Repository analysis |' }}
 
-            ${{ github.event_name == 'issue_comment' && '### Request' || '' }}
+            ${{ github.event_name == 'issue_comment' && '### User Request' || '' }}
             ${{ github.event_name == 'issue_comment' && github.event.comment.body || '' }}
 
             ---
-            > See **REPORT.md** (for issue fixes) or **ANALYSIS.md** (for analysis runs) in this PR for full details.
+            > See **REPORT.md** (issue fixes) or **ANALYSIS.md** (analysis runs) in this PR for full details.
