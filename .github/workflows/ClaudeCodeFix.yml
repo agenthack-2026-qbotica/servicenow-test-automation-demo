@@ -3,11 +3,6 @@ name: Claude Code Fix
 # ── Triggers ─────────────────────────────────────────────────────────────────
 on:
   workflow_dispatch:
-    inputs:
-      prompt:
-        description: "Task for Claude to perform"
-        required: false
-        default: "Follow CLAUDE.md and review the repository."
   issue_comment:
     types:
       - created
@@ -88,29 +83,25 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       # ── Run Claude ─────────────────────────────────────────────────────────
-      #
-      # AUTH — choose exactly ONE option and delete the other:
-      #
-      # Option A — Anthropic API key (any account):
-      #   Repo secret name: ANTHROPIC_API_KEY
-      #   Value: your key from console.anthropic.com → API Keys
-      #
-      # Option B — OAuth token (Claude Pro/Max subscribers only):
-      #   Repo secret name: CLAUDE_CODE_OAUTH_TOKEN
-      #   Value: run `claude setup-token` locally, copy the output
-      #   ⚠️  Must be passed as a `with:` input — NOT via env: (known v1 bug)
-      #
       - name: Run Claude
         uses: anthropics/claude-code-action@v1
         with:
-          # ── OAuth token (Pro/Max) — must be in with:, NOT env: ──
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          prompt: >-
-            ${{ github.event_name == 'workflow_dispatch'
-                && inputs.prompt
-                || 'Follow CLAUDE.md and complete the GitHub issue request.' }}
+          prompt: |
+            Analyse this entire UiPath test automation repository and create a
+            file called ANALYSIS.md in the root directory.
+
+            ANALYSIS.md must contain:
+            1. Project Overview - what the project does, tech stack, UiPath version if detectable
+            2. Repository Structure - list every folder and key file with a one-line description
+            3. Test Cases - for each file in TestCases/, describe what scenario it tests
+            4. Workflows - for each file in Workflows/, describe what it does
+            5. Dependencies - list packages from project.json
+            6. Known Issues / Observations - anything missing, inconsistent, or worth noting
+            7. Recommendations - suggested improvements
+
+            Write the file, then commit it with message: "docs: add ANALYSIS.md project analysis"
           claude_args: "--max-turns 20"
 
       # ── Debug ──────────────────────────────────────────────────────────────
