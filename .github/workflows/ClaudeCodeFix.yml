@@ -89,6 +89,7 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          additional_permissions: "actions: read"
           prompt: |
             Analyse this entire UiPath test automation repository and create a
             file called ANALYSIS.md in the root directory.
