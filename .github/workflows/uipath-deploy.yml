@@ -15,9 +15,7 @@ jobs:
   check-comment:
     name: Check Comment Trigger
     runs-on: ubuntu-latest
-    if: |
-      github.event.issue.pull_request != null &&
-      contains(github.event.comment.body, 'merge')
+    if: contains(github.event.comment.body, 'merge')
     outputs:
       pr_number: ${{ steps.pr-info.outputs.pr_number }}
       head_ref:  ${{ steps.pr-info.outputs.head_ref }}
