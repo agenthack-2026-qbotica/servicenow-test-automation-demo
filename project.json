@@ -1,102 +1,114 @@
-{
-  "name": "Agenthack_ServiceNowIncidents",
-  "projectId": "0018d77e-f041-4698-b4c0-0a5ed56764a8",
-  "description": "This project contains the test cases to test the ServiceNow Incidents.",
-  "main": "Main.xaml",
-  "dependencies": {
-    "UiPath.Excel.Activities": "[3.5.3]",
-    "UiPath.System.Activities": "[26.6.0]",
-    "UiPath.Testing.Activities": "[25.10.2]",
-    "UiPath.UIAutomation.Activities": "[25.10.35]"
-  },
-  "webServices": [],
-  "entitiesStores": [],
-  "schemaVersion": "4.0",
-  "studioVersion": "26.0.195.0",
-  "projectVersion": "1.0.0",
-  "runtimeOptions": {
-    "autoDispose": false,
-    "netFrameworkLazyLoading": false,
-    "isPausable": true,
-    "isAttended": false,
-    "requiresUserInteraction": true,
-    "supportsPersistence": false,
-    "workflowSerialization": "NewtonsoftJson",
-    "excludedLoggedData": [
-      "Private:*",
-      "*password*"
-    ],
-    "executionType": "Workflow",
-    "readyForPiP": false,
-    "startsInPiP": false,
-    "mustRestoreAllDependencies": true,
-    "pipType": "ChildSession"
-  },
-  "designOptions": {
-    "projectProfile": "Developement",
-    "outputType": "Tests",
-    "libraryOptions": {
-      "privateWorkflows": []
-    },
-    "processOptions": {
-      "ignoredFiles": []
-    },
-    "fileInfoCollection": [
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "54e98a20-b33a-46f4-8454-0122dcec2568",
-        "testCaseType": "TestCase",
-        "executionTemplateInvokeIsolated": false,
-        "fileName": "TestCases\\01_TC_CreateIncident.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "8d830f1e-6a3b-4934-a68c-a6f019728bba",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\03_TC_AddAssignmentGroup.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "7fa9a4d6-6d6a-4188-be3b-05e3f604cfa6",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\02_TC_UpdateIncidentPriorityToHigh.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "7ea820f2-4714-4e4b-9719-57f713727733",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\04_TC_HighPriorityWAssignGroup.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "8ff253d9-2af2-4887-8b69-7d504252e86c",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\05_TC_HighPriorityWoAssignGroup.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "59c6ed57-eff9-47a4-b805-573877215780",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\08_TC_OpenIncident.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "7c299bfe-f0d2-4915-b255-8c16c9f42036",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\06_TC_UpdateCaller.xaml"
-      },
-      {
-        "editingStatus": "Publishable",
-        "testCaseId": "7121d93b-d684-43bb-979b-9116166b0934",
-        "testCaseType": "TestCase",
-        "fileName": "TestCases\\07_TC_ChangePriorityAndUpdateCaller.xaml"
-      }
-    ],
-    "saveToCloud": false
-  },
-  "expressionLanguage": "VisualBasic",
-  "isTemplate": false,
-  "templateProjectData": {},
-  "publishData": {},
-  "targetFramework": "Windows"
+﻿{
+    "name":  "Agenthack_ServiceNowIncidents",
+    "projectId":  "0018d77e-f041-4698-b4c0-0a5ed56764a8",
+    "description":  "This project contains the test cases to test the ServiceNow Incidents.",
+    "main":  "Main.xaml",
+    "dependencies":  {
+                         "UiPath.Excel.Activities":  "[3.5.3]",
+                         "UiPath.System.Activities":  "[26.6.0]",
+                         "UiPath.Testing.Activities":  "[25.10.2]",
+                         "UiPath.UIAutomation.Activities":  "[25.10.35]"
+                     },
+    "webServices":  [
+
+                    ],
+    "entitiesStores":  [
+
+                       ],
+    "schemaVersion":  "4.0",
+    "studioVersion":  "26.0.195.0",
+    "projectVersion":  "1.0.1",
+    "runtimeOptions":  {
+                           "autoDispose":  false,
+                           "netFrameworkLazyLoading":  false,
+                           "isPausable":  true,
+                           "isAttended":  false,
+                           "requiresUserInteraction":  true,
+                           "supportsPersistence":  false,
+                           "workflowSerialization":  "NewtonsoftJson",
+                           "excludedLoggedData":  [
+                                                      "Private:*",
+                                                      "*password*"
+                                                  ],
+                           "executionType":  "Workflow",
+                           "readyForPiP":  false,
+                           "startsInPiP":  false,
+                           "mustRestoreAllDependencies":  true,
+                           "pipType":  "ChildSession"
+                       },
+    "designOptions":  {
+                          "projectProfile":  "Developement",
+                          "outputType":  "Tests",
+                          "libraryOptions":  {
+                                                 "privateWorkflows":  [
+
+                                                                      ]
+                                             },
+                          "processOptions":  {
+                                                 "ignoredFiles":  [
+
+                                                                  ]
+                                             },
+                          "fileInfoCollection":  [
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "54e98a20-b33a-46f4-8454-0122dcec2568",
+                                                         "testCaseType":  "TestCase",
+                                                         "executionTemplateInvokeIsolated":  false,
+                                                         "fileName":  "TestCases\\01_TC_CreateIncident.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "8d830f1e-6a3b-4934-a68c-a6f019728bba",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\03_TC_AddAssignmentGroup.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "7fa9a4d6-6d6a-4188-be3b-05e3f604cfa6",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\02_TC_UpdateIncidentPriorityToHigh.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "7ea820f2-4714-4e4b-9719-57f713727733",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\04_TC_HighPriorityWAssignGroup.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "8ff253d9-2af2-4887-8b69-7d504252e86c",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\05_TC_HighPriorityWoAssignGroup.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "59c6ed57-eff9-47a4-b805-573877215780",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\08_TC_OpenIncident.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "7c299bfe-f0d2-4915-b255-8c16c9f42036",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\06_TC_UpdateCaller.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "7121d93b-d684-43bb-979b-9116166b0934",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\07_TC_ChangePriorityAndUpdateCaller.xaml"
+                                                     }
+                                                 ],
+                          "saveToCloud":  false
+                      },
+    "expressionLanguage":  "VisualBasic",
+    "isTemplate":  false,
+    "templateProjectData":  {
+
+                            },
+    "publishData":  {
+
+                    },
+    "targetFramework":  "Windows"
 }
