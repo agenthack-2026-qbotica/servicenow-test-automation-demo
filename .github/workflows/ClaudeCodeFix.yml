@@ -2,7 +2,7 @@ name: Claude Code Fix
 
 # ── Triggers ─────────────────────────────────────────────────────────────────
 on:
-  workflow_dispatch:                        # FIX #10: manual runs now accept a prompt input
+  workflow_dispatch:
     inputs:
       prompt:
         description: "Task for Claude to perform"
@@ -16,7 +16,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
-  issues: read
+  issues: write
   id-token: write
 
 # ── Jobs ──────────────────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ jobs:
   claude:
     runs-on: ubuntu-latest
 
-    # FIX #2 & #11: only run on workflow_dispatch OR when comment mentions @claude
+    # Only run on workflow_dispatch OR when a comment mentions @claude
     if: |
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
@@ -88,30 +88,32 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       # ── Run Claude ─────────────────────────────────────────────────────────
-      # FIX #1:  Only ONE auth method (ANTHROPIC_API_KEY).
-      #          To use OAuth instead (Pro/Max), remove anthropic_api_key and
-      #          uncomment the env block at the bottom of this step.
-      # FIX #5:  Prompt is resolved safely for both trigger types.
-      # FIX #6:  Only inputs confirmed by anthropics/claude-code-action@v1 are used.
-      # FIX #8:  Prompt is minimal; full instructions live in CLAUDE.md.
-      # FIX #15: Action used correctly for GitHub issue/PR automation.
+      #
+      # AUTH — choose exactly ONE option and delete the other:
+      #
+      # Option A — Anthropic API key (any account):
+      #   Repo secret name: ANTHROPIC_API_KEY
+      #   Value: your key from console.anthropic.com → API Keys
+      #
+      # Option B — OAuth token (Claude Pro/Max subscribers only):
+      #   Repo secret name: CLAUDE_CODE_OAUTH_TOKEN
+      #   Value: run `claude setup-token` locally, copy the output
+      #   ⚠️  Must be passed as a `with:` input — NOT via env: (known v1 bug)
+      #
       - name: Run Claude
         uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # ── OAuth token (Pro/Max) — must be in with:, NOT env: ──
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: >-
             ${{ github.event_name == 'workflow_dispatch'
                 && inputs.prompt
                 || 'Follow CLAUDE.md and complete the GitHub issue request.' }}
-          claude_args: "--max-turns 3"
-        # ── Auth Option B (OAuth for Pro/Max subscribers) ──────────────────
-        # To switch: delete anthropic_api_key above and uncomment below:
-        # env:
-        #   CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: "--max-turns 20"
 
       # ── Debug ──────────────────────────────────────────────────────────────
-      # FIX #13: kept — useful for troubleshooting
       - name: Debug Repository
         run: |
           echo "===== Git Status ====="
@@ -127,8 +129,6 @@ jobs:
           find . -not -path './.git/*'
 
       # ── Check for Changes ──────────────────────────────────────────────────
-      # FIX #7 & #9: no longer fails the workflow when Claude makes no changes;
-      #              sets an output flag so PR creation is simply skipped.
       - name: Verify Claude Changes
         id: verify
         shell: bash
@@ -142,8 +142,6 @@ jobs:
           fi
 
       # ── Create PR ──────────────────────────────────────────────────────────
-      # FIX #5:  PR body safely handles both trigger types.
-      # FIX #14: PR creation only when changes exist — kept correct.
       - name: Create Pull Request
         if: steps.verify.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
