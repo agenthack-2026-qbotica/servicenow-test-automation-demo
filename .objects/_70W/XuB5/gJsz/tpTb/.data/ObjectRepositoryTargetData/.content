@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="kS8_ReCwukqn5LSwhNmdSg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3Dactive%253dtrue%255eGOTOnumber%253dINC0000018%26sysparm_query_encoded%3Dactive%253dtrue%255eGOTOnumber%253dINC0000018%26sysparm_view%3D" DesignTimeRectangle="853, 693, 126, 48" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl tableRow='3' tag='TABLE' /&gt;&lt;webctrl aaname='Download' tag='BUTTON' id='download_button' /&gt;" Guid="92e9ed05-ced5-4fc8-bf31-d41ced9d71bb" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Incidents | ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None">
+      <imageRef attrName="InformativeScreenshot" originalValue="6141b5abfaeb6d4b3e86a529ac235303.jpg" xmlns="">0JUxxbgupLkeKNy4glkSVkw</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

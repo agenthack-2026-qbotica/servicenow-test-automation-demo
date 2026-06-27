@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="vk-70rHAykSVCTNBBrcnxA" Reference="_BU5etMzk0KtDV4Hwc6ztw/4PoXoJX8ZUGBfRSLbPc1uw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_stack%3D%26sysparm_view%3D" DesignTimeRectangle="1061, 251, 484, 105" ElementType="ListItem" ElementVisibilityArgument="Interactive" FullSelectorArgument="[string.Format(&quot;&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl shadowhostid='' tag='SN-SEARCH-INPUT-WRAPPER' /&gt;&lt;webctrl shadowhostid='' tag='SN-COMPONENT-WORKSPACE-GLOBAL-SEARCH-TYPEAHEAD' /&gt;&lt;webctrl shadowhostid='' tag='LI' visibleinnertext='*Number: {0}*' /&gt;&quot;, in_str_IncidentNumber)]" Guid="927a6ef1-2453-42c4-a3a3-a3941d44ba99" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None">
+      <imageRef attrName="InformativeScreenshot" originalValue="087e65fd049515802d8222e527b90389.jpg" xmlns="">0CHz7-pyD4Em-z4DyfODYFw</imageRef>
+    </TargetAnchorable>
+    <scg:List x:TypeArguments="ObjectRepositoryVariableData" x:Key="Variables" Capacity="1">
+      <ObjectRepositoryVariableData DefaultValue="*" Name="in_str_IncidentNumber" />
+    </scg:List>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

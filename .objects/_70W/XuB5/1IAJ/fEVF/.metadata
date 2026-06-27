@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Dropdown_Impact",
+  "Type": "Element",
+  "TaxonomyType": "Dropdown",
+  "Id": "fEVFu-J6Y0CcEGC3RXKybw",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/fEVFu-J6Y0CcEGC3RXKybw",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-25T17:51:56.8020132Z",
+  "Updated": "2026-06-25T17:52:35.061656Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.35.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

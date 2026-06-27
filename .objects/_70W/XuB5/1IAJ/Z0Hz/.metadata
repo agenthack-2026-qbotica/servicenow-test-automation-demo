@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Button_ResolutionInformation",
+  "Type": "Element",
+  "TaxonomyType": "Button",
+  "Id": "Z0HzYTW31kCoG9CX3oeTjA",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/Z0HzYTW31kCoG9CX3oeTjA",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-25T09:28:55.4295674Z",
+  "Updated": "2026-06-25T09:29:13.8610798Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.31.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

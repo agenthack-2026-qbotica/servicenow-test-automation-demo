@@ -1,0 +1,6 @@
+{
+  "Name": "Agenthack_ServiceNowIncidents",
+  "ProjectType": "Tests",
+  "Description": "This project contains the test cases to test the ServiceNow Incidents.",
+  "MainFile": "Main.xaml"
+}

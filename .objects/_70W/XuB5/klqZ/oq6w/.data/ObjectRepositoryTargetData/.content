@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="9e65q7O4JE6Fcp7EO51caw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/ui_page.do%3Fsys_id%3D9068967483a903100e66c2dfeeaad378" DesignTimeRectangle="1852, 146, 48, 48" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl aria-label='System Administrator: Available' aria-role='button' shadowhostid='' data-id='user-menu' /&gt;" Guid="f3abaf09-3dc6-4797-b367-1459f0f954fa" ScopeSelectorArgument="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None">
+      <imageRef attrName="InformativeScreenshot" originalValue="c535e3ef74d19e3b90f7083d10fee98c.jpg" xmlns="">0c-tirY7HEUGz6uBJNaawoQ</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

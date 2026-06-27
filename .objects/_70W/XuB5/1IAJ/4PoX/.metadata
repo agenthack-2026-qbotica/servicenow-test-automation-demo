@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Link_SelectIncident",
+  "Type": "Element",
+  "TaxonomyType": "Link",
+  "Id": "4PoXoJX8ZUGBfRSLbPc1uw",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/4PoXoJX8ZUGBfRSLbPc1uw",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-25T08:48:19.1573117Z",
+  "Updated": "2026-06-25T08:50:05.0600921Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.31.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

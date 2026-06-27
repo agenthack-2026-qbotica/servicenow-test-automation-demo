@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Button_Favorites",
+  "Type": "Element",
+  "TaxonomyType": "Button",
+  "Id": "Mb1M_JJrxUiN3ll1rC9g1Q",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/Mb1M_JJrxUiN3ll1rC9g1Q",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-20T17:09:56.3443841Z",
+  "Updated": "2026-06-20T17:10:56.6128722Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.31.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

@@ -1,0 +1,322 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="SNOW_UpdateIncidentPriority" this:SNOW_UpdateIncidentPriority.str_IncidentNumber="INC0010050" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing.Common" xmlns:sd1="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:uta="clr-namespace:UiPath.Testing.Activities;assembly=UiPath.Testing.Activities" xmlns:uuam="clr-namespace:UiPath.UIAutomationNext.Activities.Models;assembly=UiPath.UIAutomationNext.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="str_IncidentNumber" Type="InArgument(x:String)" />
+  </x:Members>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>SNOW_UpdateIncidentPriority_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>UiPath.Testing.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Testing</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities.Models</x:String>
+      <x:String>UiPath.UIAutomationNext.Enums</x:String>
+      <x:String>UiPath.UIAutomationNext.Models</x:String>
+      <x:String>UiPath.UIAutomationNext.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Models.CV</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities</x:String>
+      <x:String>UiPath.Platform.ObjectLibrary</x:String>
+      <x:String>UiPath.Platform.SyncObjects</x:String>
+      <x:String>System.ComponentModel</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing</AssemblyReference>
+      <AssemblyReference>Agenthack_ServiceNowIncidents.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>NPOI.Core</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext.Activities</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="SNOW_UpdateIncidentPriority" sap:VirtualizedContainerService.HintSize="920.6666666666666,1844.6666666666667" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:UiElement" Name="Ui_Element" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Sequence DisplayName="... Given" sap:VirtualizedContainerService.HintSize="604,260" sap2010:WorkflowViewState.IdRef="Sequence_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="SNOW_Login - Invoke Workflow File (Workflows\SNOW_Login.xaml)" sap:VirtualizedContainerService.HintSize="416,168" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" Level="Trace" LogEntry="OnlyInvocation" LogExit="OnlySuccessfulReturn" UnSafe="False" WorkflowFileName="Workflows\SNOW_Login.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <OutArgument x:TypeArguments="ui:UiElement" x:Key="out_Ui_Element">[Ui_Element]</OutArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+    </Sequence>
+    <Sequence DisplayName="... When" sap:VirtualizedContainerService.HintSize="604,260" sap2010:WorkflowViewState.IdRef="Sequence_3">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="02_UpdateIncidentPriorityToHigh - Invoke Workflow File (Workflows\02_UpdateIncidentPriorityToHigh.xaml)" sap:VirtualizedContainerService.HintSize="416,168" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" Level="Trace" LogEntry="OnlyInvocation" LogExit="OnlySuccessfulReturn" UnSafe="False" WorkflowFileName="Workflows\02_UpdateIncidentPriorityToHigh.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="x:String" x:Key="in_str_IncidentNumber">[str_IncidentNumber]</InArgument>
+          <InArgument x:TypeArguments="ui:UiElement" x:Key="in_Ui_Element">[Ui_Element]</InArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+    </Sequence>
+    <Sequence DisplayName="... Then" sap:VirtualizedContainerService.HintSize="604,1302" sap2010:WorkflowViewState.IdRef="Sequence_4">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <uix:NApplicationCard AttachMode="ByInstance" CloseMode="[UiPath.UIAutomationNext.Enums.NAppCloseMode.Never]" DisplayName="Home_Dashboard" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="570,1051.3333333333333" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" InUiElement="[Ui_Element]" InteractionMode="DebuggerApi" OpenMode="[UiPath.UIAutomationNext.Enums.NAppOpenMode.Never]" ScopeGuid="2d1ee8fe-3ae2-4484-831d-a7a4cabf6621" Version="V2">
+        <uix:NApplicationCard.Body>
+          <ActivityAction x:TypeArguments="x:Object">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="568,919.3333333333334" sap2010:WorkflowViewState.IdRef="Sequence_5">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:String" Name="in_str_IncidentNumber" />
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click 'Button_Favorites'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="534,57.333333333333336" sap2010:WorkflowViewState.IdRef="NClick_1" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="2d1ee8fe-3ae2-4484-831d-a7a4cabf6621" Version="V5">
+                <uix:NClick.Target>
+                  <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/navpage.do" ContentHash="1k_95lhyJUuyUYT2k73K0g" DesignTimeRectangle="377, 135, 131, 48" ElementType="Text" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl aria-label='Favorites' aria-role='menuitem' shadowhostid='' aaname='Favorites' /&gt;" Guid="c4db0ae1-8b76-4d9b-9e51-9bb46738bab6" InformativeScreenshot="83834fa065bd1899c2fef15e41aaebfc.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/Mb1M_JJrxUiN3ll1rC9g1Q" ScopeSelectorArgument="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None" />
+                </uix:NClick.Target>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </uix:NClick>
+              <uix:NClick ActivateBefore="True" ClickType="Single" DisplayName="Click 'Home'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="534,195.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_2" InteractionMode="Simulate" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="2d1ee8fe-3ae2-4484-831d-a7a4cabf6621" Version="V5">
+                <uix:NClick.Target>
+                  <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_stack%3D%26sysparm_view%3D" ContentHash="MGYJrSYYCk-qxs2IGXY94w" DesignTimeRectangle="233, 365, 388, 30" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl aria-label='Unpinned Favorites menu' shadowhostid='' tag='SN-POLARIS-MENU' /&gt;&lt;webctrl shadowhostid='' tag='SN-COLLAPSIBLE-LIST' /&gt;&lt;webctrl class='item-icon' shadowhostid='' tag='SPAN' innertext='Home' /&gt;" Guid="933f5a49-f5e1-4b65-b540-48e74b8d21d5" InformativeScreenshot="4b3530cc4fe651488f729588e750a885.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/3cD4xklyR0yYp9eLu83yCw" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None" />
+                </uix:NClick.Target>
+              </uix:NClick>
+              <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" ClipboardMode="Never" DisplayName="Type Into 'Input_HomeSearch'" EmptyFieldMode="SingleLine" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="534,248" sap2010:WorkflowViewState.IdRef="NTypeInto_1" ScopeIdentifier="2d1ee8fe-3ae2-4484-831d-a7a4cabf6621" Text="[str_IncidentNumber]" Version="V5">
+                <uix:NTypeInto.Target>
+                  <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/ui_page.do%3Fsys_id%3D9068967483a903100e66c2dfeeaad378" ContentHash="zSNySMKcbE-2YAqM0p35lg" DesignTimeRectangle="1199, 146, 265, 48" ElementType="InputBox" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl shadowhostid='' tag='SN-SEARCH-INPUT-WRAPPER' /&gt;&lt;webctrl shadowhostid='' tag='SN-COMPONENT-WORKSPACE-GLOBAL-SEARCH-TYPEAHEAD' /&gt;&lt;webctrl id='*input' shadowhostid='' tag='INPUT' aria-label='Search' /&gt;" Guid="46547cb5-f205-4ab1-b9a4-b9d09e3cb298" InformativeScreenshot="ae426a8f34815a9694e5b7044106fd5e.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/29IbmG8JFU2bodd4lZT47w" ScopeSelectorArgument="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None" />
+                </uix:NTypeInto.Target>
+                <uix:NTypeInto.VerifyOptions>
+                  <uix:VerifyExecutionTypeIntoOptions Mode="Appears">
+                    <uix:VerifyExecutionTypeIntoOptions.Retry>
+                      <InArgument x:TypeArguments="x:Boolean" />
+                    </uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                      <InArgument x:TypeArguments="x:Double" />
+                    </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                  </uix:VerifyExecutionTypeIntoOptions>
+                </uix:NTypeInto.VerifyOptions>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </uix:NTypeInto>
+              <Assign DisplayName="Assigns incident number from input to output argument" sap:VirtualizedContainerService.HintSize="534,57.333333333333336" sap2010:WorkflowViewState.IdRef="Assign_1">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[in_str_IncidentNumber]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[str_IncidentNumber]</InArgument>
+                </Assign.Value>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </Assign>
+              <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="3" DisplayName="Click 'Link_SelectIncident'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="534,57.333333333333336" sap2010:WorkflowViewState.IdRef="NClick_3" InteractionMode="SameAsCard" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="2d1ee8fe-3ae2-4484-831d-a7a4cabf6621" Version="V5">
+                <uix:NClick.Target>
+                  <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_stack%3D%26sysparm_view%3D" ContentHash="vk-70rHAykSVCTNBBrcnxA" DesignTimeRectangle="1061, 251, 484, 105" ElementType="ListItem" ElementVisibilityArgument="Interactive" FullSelectorArgument="[string.Format(&quot;&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl shadowhostid='' tag='SN-SEARCH-INPUT-WRAPPER' /&gt;&lt;webctrl shadowhostid='' tag='SN-COMPONENT-WORKSPACE-GLOBAL-SEARCH-TYPEAHEAD' /&gt;&lt;webctrl shadowhostid='' tag='LI' visibleinnertext='*Number: {0}*' /&gt;&quot;, in_str_IncidentNumber)]" Guid="927a6ef1-2453-42c4-a3a3-a3941d44ba99" InformativeScreenshot="087e65fd049515802d8222e527b90389.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/4PoXoJX8ZUGBfRSLbPc1uw" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None" />
+                </uix:NClick.Target>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </uix:NClick>
+              <uta:VerifyControlAttribute AlternativeVerificationTitle="{x:Null}" KeepScreenshots="{x:Null}" OutputMessageFormat="{x:Null}" Result="{x:Null}" ScreenshotsPath="{x:Null}" ContinueOnFailure="False" DisplayName="Verify if Priority is High" sap:VirtualizedContainerService.HintSize="534,244" sap2010:WorkflowViewState.IdRef="VerifyControlAttribute_1" Operator="Contains" OutputArgument="TextString" TakeScreenshotInCaseOfFailingAssertion="True" TakeScreenshotInCaseOfSucceedingAssertion="False">
+                <uta:VerifyControlAttribute.ActivityToTest>
+                  <ActivityAction>
+                    <uix:NGetText DisplayName="Get Text 'Text_Priority'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="500,111.33333333333333" sap2010:WorkflowViewState.IdRef="NGetText_1" ScopeIdentifier="2d1ee8fe-3ae2-4484-831d-a7a4cabf6621" Version="V5">
+                      <uix:NGetText.OutUiElement>
+                        <OutArgument x:TypeArguments="ui:UiElement">
+                          <VariableReference x:TypeArguments="ui:UiElement">
+                            <VariableReference.Variable>
+                              <Variable x:TypeArguments="ui:UiElement" Name="_autogenerated_OutUiElement" />
+                            </VariableReference.Variable>
+                          </VariableReference>
+                        </OutArgument>
+                      </uix:NGetText.OutUiElement>
+                      <uix:NGetText.Target>
+                        <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="G3b6Vzlj306NbX5Cb1wCIg" DesignTimeRectangle="1284, 525, 356, 48" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl aria-labelledby='label.incident.priority' matching:aria-labelledby='fuzzy' fuzzylevel:aria-labelledby='0.0' tag='SELECT' aaname='*Priority' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' name='incident.priority' /&gt;" Guid="104ccb38-7761-4b47-b432-ee49a096a430" InformativeScreenshot="3a3fa5bcb7438aacabafc2ca4863df4e.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/SinqPPkEak-H6DCKu2mCnQ" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="None">
+                          <uix:TargetAnchorable.Anchors>
+                            <scg:List x:TypeArguments="uix:ITarget" Capacity="1">
+                              <uix:Target DesignTimeRectangle="960, 525, 309, 38" ElementType="Text" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='LABEL' for='incident.priority' visibleinnertext='*Priority' check:innerText='Link opens in new tab&amp;#xA;Priority' /&gt;" Guid="a04de323-9295-4ef2-a9b6-aeff45e1c814" SearchSteps="FuzzySelector" />
+                            </scg:List>
+                          </uix:TargetAnchorable.Anchors>
+                        </uix:TargetAnchorable>
+                      </uix:NGetText.Target>
+                      <uix:NGetText.TextString>
+                        <OutArgument x:TypeArguments="x:String">
+                          <VariableReference x:TypeArguments="x:String">
+                            <VariableReference.Variable>
+                              <Variable x:TypeArguments="x:String" x:Name="__ReferenceID0" Name="_autogenerated_TextString" />
+                            </VariableReference.Variable>
+                          </VariableReference>
+                        </OutArgument>
+                      </uix:NGetText.TextString>
+                      <uix:NGetText.WordsInfo>
+                        <OutArgument x:TypeArguments="scg:IEnumerable(uuam:NWordInfo)">
+                          <VariableReference x:TypeArguments="scg:IEnumerable(uuam:NWordInfo)">
+                            <VariableReference.Variable>
+                              <Variable x:TypeArguments="scg:IEnumerable(uuam:NWordInfo)" Name="_autogenerated_WordsInfo" />
+                            </VariableReference.Variable>
+                          </VariableReference>
+                        </OutArgument>
+                      </uix:NGetText.WordsInfo>
+                    </uix:NGetText>
+                  </ActivityAction>
+                </uta:VerifyControlAttribute.ActivityToTest>
+                <uta:VerifyControlAttribute.ArgumentsBridgeActivity>
+                  <ActivityFunc x:TypeArguments="x:Object">
+                    <uta:ArgumentsBridge sap2010:WorkflowViewState.IdRef="ArgumentsBridge_1">
+                      <uta:ArgumentsBridge.Input>
+                        <InArgument x:TypeArguments="x:Object">
+                          <VariableValue x:TypeArguments="x:Object" Variable="{x:Reference __ReferenceID0}" />
+                        </InArgument>
+                      </uta:ArgumentsBridge.Input>
+                    </uta:ArgumentsBridge>
+                  </ActivityFunc>
+                </uta:VerifyControlAttribute.ArgumentsBridgeActivity>
+                <uta:VerifyControlAttribute.Expression>
+                  <InArgument x:TypeArguments="x:String">["High"]</InArgument>
+                </uta:VerifyControlAttribute.Expression>
+              </uta:VerifyControlAttribute>
+            </Sequence>
+          </ActivityAction>
+        </uix:NApplicationCard.Body>
+        <uix:NApplicationCard.OCREngine>
+          <ActivityFunc x:TypeArguments="sd:Image, scg:IEnumerable(scg:KeyValuePair(sd1:Rectangle, x:String))">
+            <ActivityFunc.Argument>
+              <DelegateInArgument x:TypeArguments="sd:Image" Name="Image" />
+            </ActivityFunc.Argument>
+          </ActivityFunc>
+        </uix:NApplicationCard.OCREngine>
+        <uix:NApplicationCard.TargetApp>
+          <uix:TargetApp Area="-11, -11, 1942, 1150" BrowserType="Edge" ContentHash="SZET9DGjRE228UEVDBw_1Q" IconBase64="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" InformativeScreenshot="77d0af43f2d3f72543b7bac92dc1e5ee.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q" Selector="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" Url="https://dev181290.service-now.com/*" Version="V3">
+            <uix:TargetApp.Arguments>
+              <InArgument x:TypeArguments="x:String" />
+            </uix:TargetApp.Arguments>
+            <uix:TargetApp.WorkingDirectory>
+              <InArgument x:TypeArguments="x:String" />
+            </uix:TargetApp.WorkingDirectory>
+          </uix:TargetApp>
+        </uix:NApplicationCard.TargetApp>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </uix:NApplicationCard>
+      <ui:InvokeWorkflowFile ArgumentsVariable="{x:Null}" DisplayName="SNOW_Logout - Invoke Workflow File (Workflows\SNOW_Logout.xaml)" sap:VirtualizedContainerService.HintSize="570,168" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" Level="Trace" LogEntry="OnlyInvocation" LogExit="OnlySuccessfulReturn" UnSafe="False" WorkflowFileName="Workflows\SNOW_Logout.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="ui:UiElement" x:Key="in_Ui_Element">[Ui_Element]</InArgument>
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+    </Sequence>
+  </Sequence>
+</Activity>

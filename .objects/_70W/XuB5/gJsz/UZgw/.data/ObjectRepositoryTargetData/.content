@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="VPbW6uq98k-dTqiMkiqQxw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3Dactive%253dtrue%255eGOTOcaller_id.name%253e%253dINC0010040%26sysparm_query_encoded%3Dactive%253dtrue%255eGOTOcaller_id.name%253e%253dINC0010040%26sysparm_view%3D" DesignTimeRectangle="285, 218, 207, 48" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='SELECT' class='form-control default-focus-outline' matching:class='fuzzy' fuzzylevel:class='0.0' aria-role='combobox' parentid='incident_hide_search' /&gt;" Guid="6407a3e0-1688-40fb-b39d-9c481bf80a0e" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Incidents | ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="None">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target DesignTimeRectangle="194, 229, 85, 26" ElementType="Text" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='H1' class='navbar-title list_title ' matching:class='fuzzy' fuzzylevel:class='0.0' innertext='Incidents' check:innerText='Incidents' /&gt;" Guid="c0651684-2bff-4f55-8b2f-c0eb3eb46ea2" SearchSteps="FuzzySelector" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="d1b930432ffb00140ddece8ae84b62b4.jpg" xmlns="">0ZjHbD4Epk0Owyp0hHSEQnw</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">SelectItem</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

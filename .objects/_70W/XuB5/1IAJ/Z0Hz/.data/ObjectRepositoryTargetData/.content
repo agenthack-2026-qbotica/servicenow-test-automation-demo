@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="fcvK2DynK0ydBdxHcNawdw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" DesignTimeRectangle="299, 599, 259, 54" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl aria-role='tab' tag='SPAN' innertext='*Resolution Information' visibleinnertext='*Resolution Information' /&gt;" Guid="8050511a-56fd-490c-8533-d229e0f660f9" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None">
+      <imageRef attrName="InformativeScreenshot" originalValue="3e86f6d18790e6d3de33a5eac715c013.jpg" xmlns="">0k5vCsRApXkW5U-AChb2Qvw</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

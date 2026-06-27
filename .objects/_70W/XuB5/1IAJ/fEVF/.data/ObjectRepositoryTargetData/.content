@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="_KlwU5yxqEuxdkpFvUSRbQ" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" DesignTimeRectangle="1284, 411, 356, 48" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl aria-labelledby='label.incident.impact' matching:aria-labelledby='fuzzy' fuzzylevel:aria-labelledby='0.0' tag='SELECT' class='form-control' matching:class='fuzzy' fuzzylevel:class='0.0' aaname='Impact' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' /&gt;" Guid="0ab27723-f3f7-4e89-821b-61bda64c211b" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target DesignTimeRectangle="960, 411, 309, 38" ElementType="Text" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl type='' tag='LABEL' aaname='' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' for='incident.impact' check:innerText='Impact' /&gt;" Guid="5c47b207-4ed6-45c7-b636-370179487118" SearchSteps="FuzzySelector" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="427bd641cf6cc036bf88274be32e10ff.jpg" xmlns="">0SIU1WrNW80eWhVBoRzV6ug</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

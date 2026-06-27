@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Input_Caller",
+  "Type": "Element",
+  "TaxonomyType": "Input",
+  "Id": "fVTIvIdEg0Sv-9V7ITDDxA",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/fVTIvIdEg0Sv-9V7ITDDxA",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/gJszBh9zMUuajJIk4IZ0aQ",
+  "Created": "2026-06-20T10:42:01.2357533Z",
+  "Updated": "2026-06-20T16:32:41.1358907Z",
+  "CreatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryScreenData ContentHash="dBjPwVjVwE6mIoXvFxKlVQ" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryScreenData.Data>
+    <TargetApp x:Key="TargetApp" Area="0, 0, 0, 0" Selector="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" Url="dev181290.service-now.com/now/platform-analytics-workspace/dashboards/params/edit/false/sys-id/90c308ec43db1110b643a7ec6bb8f24b" />
+  </ObjectRepositoryScreenData.Data>
+</ObjectRepositoryScreenData>

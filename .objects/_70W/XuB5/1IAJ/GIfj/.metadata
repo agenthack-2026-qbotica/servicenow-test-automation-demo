@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Button_Incident",
+  "Type": "Element",
+  "TaxonomyType": "Button",
+  "Id": "GIfjr5uCoE--UoS0m6ysHQ",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/GIfjr5uCoE--UoS0m6ysHQ",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-20T10:22:44.0608831Z",
+  "Updated": "2026-06-20T16:35:37.2381854Z",
+  "CreatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

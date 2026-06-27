@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Text_Number",
+  "Type": "Element",
+  "TaxonomyType": "Text",
+  "Id": "956C8Ku950ON_XUqaDqooA",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/956C8Ku950ON_XUqaDqooA",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/gJszBh9zMUuajJIk4IZ0aQ",
+  "Created": "2026-06-20T10:42:07.759636Z",
+  "Updated": "2026-06-20T16:34:30.0746883Z",
+  "CreatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

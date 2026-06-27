@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Text_Resolved",
+  "Type": "Element",
+  "TaxonomyType": "Text",
+  "Id": "Y8-I87cA-keASBoiqBzBlQ",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/Y8-I87cA-keASBoiqBzBlQ",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-25T10:57:10.2381534Z",
+  "Updated": "2026-06-25T11:10:30.1370546Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.31.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

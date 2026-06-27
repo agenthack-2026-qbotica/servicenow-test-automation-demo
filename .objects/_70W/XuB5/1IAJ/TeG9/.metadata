@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Dropdown_Urgency",
+  "Type": "Element",
+  "TaxonomyType": "Dropdown",
+  "Id": "TeG9OPXnyUyfI3gSh1QL4w",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/TeG9OPXnyUyfI3gSh1QL4w",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-25T17:35:57.1299185Z",
+  "Updated": "2026-06-25T17:36:38.3805166Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.35.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="Df9puYncV0OBOkQV6eXaDw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/ui_page.do%3Fsys_id%3D9068967483a903100e66c2dfeeaad378" DesignTimeRectangle="163, 596, 354, 30" ElementType="Text" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='SN-POLARIS-MENU' /&gt;&lt;webctrl shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='SN-COLLAPSIBLE-LIST' /&gt;&lt;webctrl aria-role='heading' matching:aria-role='fuzzy' fuzzylevel:aria-role='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='SPAN' class='label' matching:class='fuzzy' fuzzylevel:class='0.0' aaname='Incident' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' check:innerText='Incident' /&gt;" Guid="0eee84cd-3124-43c4-8791-a73d12cf7299" ScopeSelectorArgument="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="None">
+      <imageRef attrName="InformativeScreenshot" originalValue="a3b9721d2101b92962fc519e57932c27.jpg" xmlns="">0BLwmDlTC2ku7Vs-UX8URlA</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

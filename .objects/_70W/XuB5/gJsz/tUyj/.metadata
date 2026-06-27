@@ -1,0 +1,16 @@
+﻿{
+  "Name": "Input_SearchNumber",
+  "Type": "Element",
+  "TaxonomyType": "Input",
+  "Id": "tUyjNKnNn0mI_Anmh9vg8w",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/tUyjNKnNn0mI_Anmh9vg8w",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/gJszBh9zMUuajJIk4IZ0aQ",
+  "Created": "2026-06-20T16:31:07.0315568Z",
+  "Updated": "2026-06-20T16:32:32.9595818Z",
+  "CreatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

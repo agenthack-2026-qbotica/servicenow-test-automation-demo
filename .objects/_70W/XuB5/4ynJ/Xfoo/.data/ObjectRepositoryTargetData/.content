@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="TfwbrxFS0EGd-xldiEXVkQ" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/navpage.do" DesignTimeRectangle="754, 645, 388, 48" ElementType="InputBoxPassword" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='INPUT' type='password' aaname='Password' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' name='user_password' /&gt;" Guid="988c2c8e-a68a-4714-bc07-cd06e928e685" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Log in | ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="None">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target DesignTimeRectangle="754, 616, 75, 23" ElementType="Text" FuzzySelectorArgument="&lt;webctrl aaname='Password' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' tag='LABEL' check:innerText='Password' /&gt;" Guid="7858e57e-23d5-46ca-b94b-394fbf62fea0" SearchSteps="FuzzySelector" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="2855ad36e850873efc7be4c85f73ffdd.jpg" xmlns="">0cAoPBPHqXE2uHb5d3ypl_g</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">TypeInto</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

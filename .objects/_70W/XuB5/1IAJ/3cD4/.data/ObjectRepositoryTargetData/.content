@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="MGYJrSYYCk-qxs2IGXY94w" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_stack%3D%26sysparm_view%3D" DesignTimeRectangle="233, 365, 388, 30" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl aria-label='Unpinned Favorites menu' shadowhostid='' tag='SN-POLARIS-MENU' /&gt;&lt;webctrl shadowhostid='' tag='SN-COLLAPSIBLE-LIST' /&gt;&lt;webctrl class='item-icon' shadowhostid='' tag='SPAN' innertext='Home' /&gt;" Guid="933f5a49-f5e1-4b65-b540-48e74b8d21d5" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="None">
+      <imageRef attrName="InformativeScreenshot" originalValue="4b3530cc4fe651488f729588e750a885.jpg" xmlns="">0aHyrptH95EKBhsYeuBD6uQ</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

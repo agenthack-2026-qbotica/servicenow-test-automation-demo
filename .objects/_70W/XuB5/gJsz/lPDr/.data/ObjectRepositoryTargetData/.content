@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="MNtkdNCba06OPvnQ3hlirw" Reference="_BU5etMzk0KtDV4Hwc6ztw/lPDrffA4CUuEZesXXaQ7Qg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3Dactive%253dtrue%255eGOTOnumber%253dINC0000018%26sysparm_query_encoded%3Dactive%253dtrue%255eGOTOnumber%253dINC0000018%26sysparm_view%3D" DesignTimeRectangle="240, 326, 36, 36" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl aria-role='button' tableRow='1' tag='I' colName='Number' rowName='Select All' data-original-title='Column options' /&gt;" Guid="805b1dcb-77ed-4de8-b919-78c23b74de4b" ImageBase64="iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAABDSURBVFhH7c6hAQAwDICw/v/05mtjKohEMe+42eGaBlWDqkHVoGpQNagaVA2qBlWDqkHVoGpQNagaVA2qBlWDqkH1AQCc6GlNiQh4AAAAAElFTkSuQmCC" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Incidents | ServiceNow' /&gt;" SearchSteps="Selector, Image" Version="V6" WaitForReadyArgument="None">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target DesignTimeRectangle="131, 330, 76, 28" ElementType="Text" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='TABLE' /&gt;&lt;webctrl type='' tag='A' class='column_head list_hdrcell table-col-header' matching:class='fuzzy' fuzzylevel:class='0.0' aaname='Number' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' colName='Number' check:innerText='Number' /&gt;" Guid="edbb25d6-eba4-440e-94e3-c8ce34895a12" SearchSteps="FuzzySelector" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="cca85de7f6c2ce879a7aae1c5859556e.jpg" xmlns="">0UedJzQVh7E6ebGfapnve7Q</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

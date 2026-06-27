@@ -1,0 +1,17 @@
+﻿{
+  "Name": "Combobox_Incidents",
+  "Type": "Element",
+  "TaxonomyType": "Dropdown",
+  "Id": "UZgwlNeR6EuH6K4YlRLLNA",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/UZgwlNeR6EuH6K4YlRLLNA",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/gJszBh9zMUuajJIk4IZ0aQ",
+  "Created": "2026-06-20T17:22:39.7422686Z",
+  "Updated": "2026-06-20T17:33:28.6706415Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.31.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ],
+  "UpdatedBy": [
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

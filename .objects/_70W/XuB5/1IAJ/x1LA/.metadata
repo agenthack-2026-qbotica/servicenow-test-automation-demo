@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Resolution notes",
+  "Type": "Element",
+  "TaxonomyType": "Input",
+  "Id": "x1LAqj6110eFoTijJgh83A",
+  "Reference": "_BU5etMzk0KtDV4Hwc6ztw/x1LAqj6110eFoTijJgh83A",
+  "ParentRef": "_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q",
+  "Created": "2026-06-25T10:48:03.4680694Z",
+  "Updated": "2026-06-25T10:48:03.4680694Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.31.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=26.4.0.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}
