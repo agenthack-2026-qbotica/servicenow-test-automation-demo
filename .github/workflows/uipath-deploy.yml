@@ -1,7 +1,7 @@
 name: UiPath Package & Publish to Orchestrator
 
 # ─────────────────────────────────────────────────────────────
-# TRIGGER: Any PR comment containing the word "merge"
+# TRIGGER: Any comment containing "merge"
 # ─────────────────────────────────────────────────────────────
 on:
   issue_comment:
@@ -10,7 +10,7 @@ on:
 jobs:
 
   # ─────────────────────────────────────────────────────────────
-  # JOB 1 — Gate: validate comment is on a PR and contains "merge"
+  # JOB 1 — Gate: validate comment contains "merge"
   # ─────────────────────────────────────────────────────────────
   check-comment:
     name: Check Comment Trigger
@@ -20,13 +20,12 @@ jobs:
       pr_number: ${{ steps.pr-info.outputs.pr_number }}
       head_ref:  ${{ steps.pr-info.outputs.head_ref }}
     steps:
-      - name: Get PR info
+      - name: Get latest open PR
         id: pr-info
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Fetch the most recent open PR (desc order = latest first)
             const { data: prs } = await github.rest.pulls.list({
               owner:     context.repo.owner,
               repo:      context.repo.repo,
@@ -35,19 +34,17 @@ jobs:
               direction: 'desc',
               per_page:  1
             });
-            if (prs.length === 0) {
-              core.setFailed('No open pull requests found.');
-            }
+            if (prs.length === 0) core.setFailed('No open pull requests found.');
             const pr = prs[0];
             core.setOutput('pr_number', pr.number);
             core.setOutput('head_ref',  pr.head.ref);
             console.log(`Latest open PR #${pr.number} from branch: ${pr.head.ref}`);
 
   # ─────────────────────────────────────────────────────────────
-  # JOB 2 — Merge the PR into main
+  # JOB 2 — Merge the PR into master
   # ─────────────────────────────────────────────────────────────
   merge-pr:
-    name: Merge PR into main
+    name: Merge PR into master
     needs: check-comment
     runs-on: ubuntu-latest
     steps:
@@ -61,73 +58,75 @@ jobs:
               repo:         context.repo.repo,
               pull_number:  ${{ needs.check-comment.outputs.pr_number }},
               merge_method: 'squash',
-              base: 'master'
+              base:         'master'
             });
-            console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into main.');
+            console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into master.');
 
   # ─────────────────────────────────────────────────────────────
   # JOB 3 — Pack & Publish to UiPath Orchestrator
+  #
+  # PACK:    dotnet tool (UiPath.CLI.Windows) → uipcli package pack
+  # PUBLISH: Orchestrator REST API via curl + PAT as Bearer token
+  #          POST /odata/Processes/UiPath.Server.Configuration.OData.UploadPackage
+  #          Auth: Authorization: Bearer <UIPATH_PAT>   ← PAT used directly, no exchange needed
   # ─────────────────────────────────────────────────────────────
   package-and-publish:
     name: Package & Publish to Orchestrator
     needs: [check-comment, merge-pr]
-    runs-on: windows-latest
+    runs-on: windows-latest            # Windows required for UiPath.CLI.Windows pack
+
     env:
-      UIPATH_ORCH_URL:    ${{ secrets.UIPATH_ORCH_URL }}
-      UIPATH_TENANT:      ${{ secrets.UIPATH_TENANT }}
-      UIPATH_ORG:         ${{ secrets.UIPATH_ORG }}
-      UIPATH_FOLDER:      ${{ secrets.UIPATH_FOLDER }}
-      UIPATH_PAT:         ${{ secrets.UIPATH_PAT }}
+      UIPATH_CLI_VERSION: "25.10.21"   # UiPath.CLI.Windows on NuGet — confirmed latest
       PROJECT_PATH:       "."
       OUTPUT_PATH:        "${{ github.workspace }}\\output"
-      UIPATH_CLI_VERSION: "25.4.8845.32219"
+
+      # ── All from GitHub Secrets ──────────────────────────────
+      UIPATH_ORCH_URL:    ${{ secrets.UIPATH_ORCH_URL }}   # https://cloud.uipath.com
+      UIPATH_ORG:         ${{ secrets.UIPATH_ORG }}         # your org name in URL
+      UIPATH_TENANT:      ${{ secrets.UIPATH_TENANT }}      # your tenant name in URL
+      UIPATH_FOLDER:      ${{ secrets.UIPATH_FOLDER }}      # Orchestrator folder name
+      UIPATH_PAT:         ${{ secrets.UIPATH_PAT }}         # pt0_xxx — used as Bearer token
 
     steps:
-      # 1. Checkout main after merge
-      - name: Checkout main branch
+
+      # 1. Checkout master after merge
+      - name: Checkout master branch
         uses: actions/checkout@v4
         with:
           ref: master
           fetch-depth: 0
 
-      # 2. Cache UiPath CLI to speed up reruns
-      - name: Cache UiPath CLI
+      # 2. Cache dotnet tool install
+      - name: Cache UiPath CLI dotnet tool
         id: cache-cli
         uses: actions/cache@v4
         with:
-          path: C:\uipath-cli
+          path: ~/.dotnet/tools
           key: uipath-cli-${{ env.UIPATH_CLI_VERSION }}
 
-      # 3. Download & extract UiPath CLI if not cached
-      - name: Download UiPath CLI
+      # 3. Install UiPath.CLI.Windows via dotnet tool (if not cached)
+      - name: Install UiPath CLI
         if: steps.cache-cli.outputs.cache-hit != 'true'
         shell: powershell
         run: |
-          $cliUrl = "https://uipath.pkgs.visualstudio.com/Public.Feeds/_packaging/UiPath-Official/nuget/v3/flat2/uipath.cli/$env:UIPATH_CLI_VERSION/uipath.cli.$env:UIPATH_CLI_VERSION.nupkg"
-          New-Item -ItemType Directory -Force -Path "C:\uipath-cli" | Out-Null
-          Invoke-WebRequest -Uri $cliUrl -OutFile "C:\uipath-cli\uipath.cli.nupkg"
-          Expand-Archive -Path "C:\uipath-cli\uipath.cli.nupkg" `
-                         -DestinationPath "C:\uipath-cli\extracted" -Force
-          Write-Host "UiPath CLI downloaded and extracted."
+          dotnet tool install --global UiPath.CLI.Windows --version $env:UIPATH_CLI_VERSION
+          Write-Host "UiPath CLI installed: $env:UIPATH_CLI_VERSION"
 
-      # 4. Locate uipcli.exe and store path in GITHUB_ENV
-      - name: Set CLI executable path
+      # 4. Add dotnet tools to PATH
+      - name: Add dotnet tools to PATH
         shell: powershell
         run: |
-          $cli = Get-ChildItem "C:\uipath-cli\extracted" -Recurse -Filter "uipcli.exe" |
-                 Select-Object -First 1
-          if (-not $cli) { Write-Error "uipcli.exe not found!"; exit 1 }
-          "CLI_PATH=$($cli.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
-          Write-Host "CLI found at: $($cli.FullName)"
+          $toolsPath = "$env:USERPROFILE\.dotnet\tools"
+          echo "$toolsPath" | Out-File -FilePath $env:GITHUB_PATH -Append
+          Write-Host "Added to PATH: $toolsPath"
 
-      # 5. Create output folder
+      # 5. Create output directory
       - name: Create output directory
         shell: powershell
         run: New-Item -ItemType Directory -Force -Path "$env:OUTPUT_PATH" | Out-Null
 
-      # 6. Derive version: use git tag if exists, else date.shortSHA
+      # 6. Derive version: git tag or date.shortSHA
       - name: Derive package version
-        id: version
         shell: powershell
         run: |
           $tag = git describe --tags --abbrev=0 2>$null
@@ -135,42 +134,58 @@ jobs:
             $ver = $tag.TrimStart('v')
           } else {
             $sha  = "${{ github.sha }}".Substring(0, 7)
-            $date = Get-Date -Format "yyyy.MM.dd"
+            $date = Get-Date -Format "yyyy.M.d"
             $ver  = "$date.$sha"
           }
           Write-Host "Package version: $ver"
           "PACKAGE_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      # 7. Pack the UiPath project into .nupkg
+      # 7. Pack the UiPath project → produces .nupkg in OUTPUT_PATH
       - name: Pack UiPath project
         shell: powershell
         run: |
-          & "$env:CLI_PATH" package pack `
-            "$env:PROJECT_PATH\project.json" `
+          uipcli package pack "$env:PROJECT_PATH\project.json" `
             --output "$env:OUTPUT_PATH" `
             --version "$env:PACKAGE_VERSION" `
             --autoVersion false
           if ($LASTEXITCODE -ne 0) { Write-Error "Pack failed!"; exit 1 }
-          Write-Host "Packaging complete."
+          Write-Host "Pack complete."
 
-      # 8. Publish .nupkg to Orchestrator via PAT
-      - name: Publish to Orchestrator
+      # 8. Publish .nupkg to Orchestrator via REST API using PAT as Bearer token
+      #
+      #    Endpoint: POST /odata/Processes/UiPath.Server.Configuration.OData.UploadPackage
+      #    Auth:     Authorization: Bearer <PAT>   ← PAT used directly, no token exchange
+      #    Folder:   X-UIPATH-FolderPath header
+      #
+      - name: Publish to Orchestrator via API
         shell: powershell
         run: |
           $nupkg = Get-ChildItem "$env:OUTPUT_PATH" -Filter "*.nupkg" | Select-Object -First 1
-          if (-not $nupkg) { Write-Error "No .nupkg found to publish!"; exit 1 }
+          if (-not $nupkg) { Write-Error "No .nupkg found in output!"; exit 1 }
           Write-Host "Publishing: $($nupkg.FullName)"
 
-          & "$env:CLI_PATH" package deploy `
-            "$($nupkg.FullName)" `
-            --orchestratorUrl    "$env:UIPATH_ORCH_URL" `
-            --orchestratorTenant "$env:UIPATH_TENANT" `
-            --organizationUnit   "$env:UIPATH_FOLDER" `
-            --accountName        "$env:UIPATH_ORG" `
-            --token              "$env:UIPATH_PAT"
+          $uploadUrl = "$env:UIPATH_ORCH_URL/$env:UIPATH_ORG/$env:UIPATH_TENANT/orchestrator_/odata/Processes/UiPath.Server.Configuration.OData.UploadPackage"
 
-          if ($LASTEXITCODE -ne 0) { Write-Error "Publish failed!"; exit 1 }
-          Write-Host "Published successfully to Orchestrator."
+          # curl is available on Windows runners — use full URL, no leading slash (avoids Git bash path rewrite)
+          $response = curl.exe -s -w "`n%{http_code}" `
+            -X POST "$uploadUrl" `
+            -H "Authorization: Bearer $env:UIPATH_PAT" `
+            -H "X-UIPATH-FolderPath: $env:UIPATH_FOLDER" `
+            -F "file=@$($nupkg.FullName)"
+
+          # Split body and status code
+          $lines     = $response -split "`n"
+          $httpCode  = $lines[-1].Trim()
+          $body      = ($lines[0..($lines.Count - 2)]) -join "`n"
+
+          Write-Host "HTTP Status: $httpCode"
+          Write-Host "Response:    $body"
+
+          if ($httpCode -notmatch '^2') {
+            Write-Error "Upload failed with HTTP $httpCode"
+            exit 1
+          }
+          Write-Host "Package published successfully to Orchestrator."
 
       # 9. Upload .nupkg as GitHub Actions artifact (audit trail)
       - name: Upload nupkg artifact
@@ -183,22 +198,22 @@ jobs:
 
       # 10. Post result comment on the PR
       #     PR number  → from comment trigger (needs.check-comment.outputs.pr_number)
-      #     All others → from GitHub secrets, passed via step env into the shell script
+      #     All others → from secrets via step-level env
       - name: Comment result on PR
         if: always()
         shell: bash
         env:
-          GH_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER:     ${{ needs.check-comment.outputs.pr_number }}
-          PKG_VERSION:   ${{ env.PACKAGE_VERSION }}
-          ORCH_ORG:      ${{ secrets.UIPATH_ORG }}
-          ORCH_TENANT:   ${{ secrets.UIPATH_TENANT }}
-          ORCH_FOLDER:   ${{ secrets.UIPATH_FOLDER }}
-          JOB_STATUS:    ${{ job.status }}
-          REPO:          ${{ github.repository }}
-          SHA:           ${{ github.sha }}
-          RUN_ID:        ${{ github.run_id }}
-          SERVER_URL:    ${{ github.server_url }}
+          GH_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER:   ${{ needs.check-comment.outputs.pr_number }}
+          PKG_VERSION: ${{ env.PACKAGE_VERSION }}
+          ORCH_ORG:    ${{ secrets.UIPATH_ORG }}
+          ORCH_TENANT: ${{ secrets.UIPATH_TENANT }}
+          ORCH_FOLDER: ${{ secrets.UIPATH_FOLDER }}
+          JOB_STATUS:  ${{ job.status }}
+          REPO:        ${{ github.repository }}
+          SHA:         ${{ github.sha }}
+          RUN_ID:      ${{ github.run_id }}
+          SERVER_URL:  ${{ github.server_url }}
         run: |
           SHORT_SHA="${SHA:0:7}"
           RUN_URL="${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
