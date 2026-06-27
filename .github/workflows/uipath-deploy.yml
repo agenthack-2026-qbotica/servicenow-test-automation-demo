@@ -1,0 +1,232 @@
+name: UiPath Package & Publish to Orchestrator
+
+# ─────────────────────────────────────────────────────────────
+# TRIGGER: Any PR comment containing the word "merge"
+# ─────────────────────────────────────────────────────────────
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 1 — Gate: validate comment is on a PR and contains "merge"
+  # ─────────────────────────────────────────────────────────────
+  check-comment:
+    name: Check Comment Trigger
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request != null &&
+      contains(github.event.comment.body, 'merge')
+    outputs:
+      pr_number: ${{ steps.pr-info.outputs.pr_number }}
+      head_ref:  ${{ steps.pr-info.outputs.head_ref }}
+    steps:
+      - name: Get PR info
+        id: pr-info
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner:       context.repo.owner,
+              repo:        context.repo.repo,
+              pull_number: context.issue.number
+            });
+            core.setOutput('pr_number', pr.data.number);
+            core.setOutput('head_ref',  pr.data.head.ref);
+            console.log(`PR #${pr.data.number} from branch: ${pr.data.head.ref}`);
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 2 — Merge the PR into main
+  # ─────────────────────────────────────────────────────────────
+  merge-pr:
+    name: Merge PR into main
+    needs: check-comment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge pull request
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.pulls.merge({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              pull_number:  ${{ needs.check-comment.outputs.pr_number }},
+              merge_method: 'squash'
+            });
+            console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into main.');
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 3 — Pack & Publish to UiPath Orchestrator
+  # ─────────────────────────────────────────────────────────────
+  package-and-publish:
+    name: Package & Publish to Orchestrator
+    needs: [check-comment, merge-pr]
+    runs-on: windows-latest
+    env:
+      UIPATH_ORCH_URL:    ${{ secrets.UIPATH_ORCH_URL }}
+      UIPATH_TENANT:      ${{ secrets.UIPATH_TENANT }}
+      UIPATH_ORG:         ${{ secrets.UIPATH_ORG }}
+      UIPATH_FOLDER:      ${{ secrets.UIPATH_FOLDER }}
+      UIPATH_PAT:         ${{ secrets.UIPATH_PAT }}
+      PROJECT_PATH:       "."
+      OUTPUT_PATH:        "${{ github.workspace }}\\output"
+      UIPATH_CLI_VERSION: "25.4.8845.32219"
+
+    steps:
+      # 1. Checkout main after merge
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      # 2. Cache UiPath CLI to speed up reruns
+      - name: Cache UiPath CLI
+        id: cache-cli
+        uses: actions/cache@v4
+        with:
+          path: C:\uipath-cli
+          key: uipath-cli-${{ env.UIPATH_CLI_VERSION }}
+
+      # 3. Download & extract UiPath CLI if not cached
+      - name: Download UiPath CLI
+        if: steps.cache-cli.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          $cliUrl = "https://uipath.pkgs.visualstudio.com/Public.Feeds/_packaging/UiPath-Official/nuget/v3/flat2/uipath.cli/$env:UIPATH_CLI_VERSION/uipath.cli.$env:UIPATH_CLI_VERSION.nupkg"
+          New-Item -ItemType Directory -Force -Path "C:\uipath-cli" | Out-Null
+          Invoke-WebRequest -Uri $cliUrl -OutFile "C:\uipath-cli\uipath.cli.nupkg"
+          Expand-Archive -Path "C:\uipath-cli\uipath.cli.nupkg" `
+                         -DestinationPath "C:\uipath-cli\extracted" -Force
+          Write-Host "UiPath CLI downloaded and extracted."
+
+      # 4. Locate uipcli.exe and store path in GITHUB_ENV
+      - name: Set CLI executable path
+        shell: powershell
+        run: |
+          $cli = Get-ChildItem "C:\uipath-cli\extracted" -Recurse -Filter "uipcli.exe" |
+                 Select-Object -First 1
+          if (-not $cli) { Write-Error "uipcli.exe not found!"; exit 1 }
+          "CLI_PATH=$($cli.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "CLI found at: $($cli.FullName)"
+
+      # 5. Create output folder
+      - name: Create output directory
+        shell: powershell
+        run: New-Item -ItemType Directory -Force -Path "$env:OUTPUT_PATH" | Out-Null
+
+      # 6. Derive version: use git tag if exists, else date.shortSHA
+      - name: Derive package version
+        id: version
+        shell: powershell
+        run: |
+          $tag = git describe --tags --abbrev=0 2>$null
+          if ($LASTEXITCODE -eq 0 -and $tag) {
+            $ver = $tag.TrimStart('v')
+          } else {
+            $sha  = "${{ github.sha }}".Substring(0, 7)
+            $date = Get-Date -Format "yyyy.MM.dd"
+            $ver  = "$date.$sha"
+          }
+          Write-Host "Package version: $ver"
+          "PACKAGE_VERSION=$ver" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      # 7. Pack the UiPath project into .nupkg
+      - name: Pack UiPath project
+        shell: powershell
+        run: |
+          & "$env:CLI_PATH" package pack `
+            "$env:PROJECT_PATH\project.json" `
+            --output "$env:OUTPUT_PATH" `
+            --version "$env:PACKAGE_VERSION" `
+            --autoVersion false
+          if ($LASTEXITCODE -ne 0) { Write-Error "Pack failed!"; exit 1 }
+          Write-Host "Packaging complete."
+
+      # 8. Publish .nupkg to Orchestrator via PAT
+      - name: Publish to Orchestrator
+        shell: powershell
+        run: |
+          $nupkg = Get-ChildItem "$env:OUTPUT_PATH" -Filter "*.nupkg" | Select-Object -First 1
+          if (-not $nupkg) { Write-Error "No .nupkg found to publish!"; exit 1 }
+          Write-Host "Publishing: $($nupkg.FullName)"
+
+          & "$env:CLI_PATH" package deploy `
+            "$($nupkg.FullName)" `
+            --orchestratorUrl    "$env:UIPATH_ORCH_URL" `
+            --orchestratorTenant "$env:UIPATH_TENANT" `
+            --organizationUnit   "$env:UIPATH_FOLDER" `
+            --accountName        "$env:UIPATH_ORG" `
+            --token              "$env:UIPATH_PAT"
+
+          if ($LASTEXITCODE -ne 0) { Write-Error "Publish failed!"; exit 1 }
+          Write-Host "Published successfully to Orchestrator."
+
+      # 9. Upload .nupkg as GitHub Actions artifact (audit trail)
+      - name: Upload nupkg artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uipath-package-${{ env.PACKAGE_VERSION }}
+          path: ${{ env.OUTPUT_PATH }}\*.nupkg
+          retention-days: 30
+
+      # 10. Post result comment on the PR
+      #     PR number  → from comment trigger (needs.check-comment.outputs.pr_number)
+      #     All others → from GitHub secrets, passed via step env into the shell script
+      - name: Comment result on PR
+        if: always()
+        shell: bash
+        env:
+          GH_TOKEN:      ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER:     ${{ needs.check-comment.outputs.pr_number }}
+          PKG_VERSION:   ${{ env.PACKAGE_VERSION }}
+          ORCH_ORG:      ${{ secrets.UIPATH_ORG }}
+          ORCH_TENANT:   ${{ secrets.UIPATH_TENANT }}
+          ORCH_FOLDER:   ${{ secrets.UIPATH_FOLDER }}
+          JOB_STATUS:    ${{ job.status }}
+          REPO:          ${{ github.repository }}
+          SHA:           ${{ github.sha }}
+          RUN_ID:        ${{ github.run_id }}
+          SERVER_URL:    ${{ github.server_url }}
+        run: |
+          SHORT_SHA="${SHA:0:7}"
+          RUN_URL="${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
+          COMMIT_URL="${SERVER_URL}/${REPO}/commit/${SHA}"
+
+          if [ "$JOB_STATUS" = "success" ]; then
+            BODY="## ✅ UiPath Publish Succeeded
+
+          | Field            | Value |
+          |------------------|-------|
+          | **PR**           | #${PR_NUMBER} |
+          | **Branch**       | \`main\` (merged) |
+          | **Commit**       | [\`${SHORT_SHA}\`](${COMMIT_URL}) |
+          | **Package**      | \`${PKG_VERSION}.nupkg\` |
+          | **Orchestrator** | ${ORCH_ORG} / ${ORCH_TENANT} |
+          | **Folder**       | \`${ORCH_FOLDER}\` |
+          | **Run**          | [View workflow run](${RUN_URL}) |
+
+          > 🤖 Triggered by comment on PR #${PR_NUMBER}. Package is live in Orchestrator."
+          else
+            BODY="## ❌ UiPath Publish Failed
+
+          | Field        | Value |
+          |--------------|-------|
+          | **PR**       | #${PR_NUMBER} |
+          | **Branch**   | \`main\` |
+          | **Commit**   | [\`${SHORT_SHA}\`](${COMMIT_URL}) |
+          | **Package**  | \`${PKG_VERSION}.nupkg\` |
+          | **Run**      | [View workflow run](${RUN_URL}) |
+
+          > ⚠️ Check the workflow run logs for details. Package was **not** published to Orchestrator."
+          fi
+
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${REPO}/issues/${PR_NUMBER}/comments \
+            -f body="$BODY"
