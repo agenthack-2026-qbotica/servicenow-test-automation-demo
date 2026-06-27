@@ -60,7 +60,8 @@ jobs:
               owner:        context.repo.owner,
               repo:         context.repo.repo,
               pull_number:  ${{ needs.check-comment.outputs.pr_number }},
-              merge_method: 'squash'
+              merge_method: 'squash',
+              base: 'master'
             });
             console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into main.');
 
@@ -86,7 +87,7 @@ jobs:
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: master
           fetch-depth: 0
 
       # 2. Cache UiPath CLI to speed up reruns
@@ -209,7 +210,7 @@ jobs:
           | Field            | Value |
           |------------------|-------|
           | **PR**           | #${PR_NUMBER} |
-          | **Branch**       | \`main\` (merged) |
+          | **Branch**       | \`master\` (merged) |
           | **Commit**       | [\`${SHORT_SHA}\`](${COMMIT_URL}) |
           | **Package**      | \`${PKG_VERSION}.nupkg\` |
           | **Orchestrator** | ${ORCH_ORG} / ${ORCH_TENANT} |
@@ -223,7 +224,7 @@ jobs:
           | Field        | Value |
           |--------------|-------|
           | **PR**       | #${PR_NUMBER} |
-          | **Branch**   | \`main\` |
+          | **Branch**   | \`master\` |
           | **Commit**   | [\`${SHORT_SHA}\`](${COMMIT_URL}) |
           | **Package**  | \`${PKG_VERSION}.nupkg\` |
           | **Run**      | [View workflow run](${RUN_URL}) |
@@ -231,8 +232,8 @@ jobs:
           > ⚠️ Check the workflow run logs for details. Package was **not** published to Orchestrator."
           fi
 
-          gh api \
-            --method POST \
+          curl -s -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
-            /repos/${REPO}/issues/${PR_NUMBER}/comments \
-            -f body="$BODY"
+            "https://api.github.com/repos/${REPO}/issues/${PR_NUMBER}/comments" \
+            -d "$(jq -n --arg body "$BODY" '{body: $body}')"
