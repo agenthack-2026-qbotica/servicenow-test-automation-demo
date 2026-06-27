@@ -13,33 +13,29 @@ permissions:
   pull-requests: write
   issues: write
   id-token: write
-  actions: read       # Required for Claude to read CI results
+  actions: read
 
 # ── Jobs ──────────────────────────────────────────────────────────────────────
 jobs:
   claude:
     runs-on: ubuntu-latest
 
-    # Only run on workflow_dispatch OR when a comment mentions @claude
     if: |
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude'))
 
     steps:
-      # ── Checkout ──────────────────────────────────────────────────────────
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
 
-      # ── Node ──────────────────────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      # ── Claude Code CLI ───────────────────────────────────────────────────
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
 
@@ -49,7 +45,6 @@ jobs:
           which claude
           claude --version
 
-      # ── UiPath ────────────────────────────────────────────────────────────
       - name: Install UiPath CLI
         run: npm install -g @uipath/cli
 
@@ -61,7 +56,6 @@ jobs:
       - name: Install Claude Skill
         run: uip skills install --agent claude
 
-      # ── Project Dependencies ──────────────────────────────────────────────
       - name: Install Dependencies
         shell: bash
         run: |
@@ -77,11 +71,85 @@ jobs:
             pnpm install
           fi
 
-      # ── Git Identity ───────────────────────────────────────────────────────
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # ── Build Prompt ───────────────────────────────────────────────────────
+      - name: Build Prompt
+        id: build_prompt
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            COMMENT='${{ github.event.comment.body }}'
+            TASK="${COMMENT/@claude/}"
+            TASK="${TASK#"${TASK%%[![:space:]]*}"}"
+
+            cat >> $GITHUB_ENV << 'PROMPT'
+          PROMPT=You are an expert UiPath RPA developer and test automation engineer.
+
+          This is a UiPath test automation project that automates ServiceNow incident lifecycle testing via browser automation. All automation logic is in XAML workflows under Workflows/ and test cases under TestCases/. Use the UiPath skills available to you (uipath-rpa, uipath-test, uipath-review, uipath-troubleshoot) to understand and fix the issue.
+
+          ISSUE #${{ github.event.issue.number }}: ${{ github.event.issue.title }}
+
+          ISSUE DESCRIPTION:
+          ${{ github.event.issue.body }}
+
+          USER REQUEST (from comment):
+          TASK_PLACEHOLDER
+
+          INSTRUCTIONS:
+          1. Read the issue description and user request carefully
+          2. Use UiPath skills to analyse the relevant XAML files (Workflows/ and TestCases/)
+          3. Identify the root cause of the issue
+          4. Implement the fix directly in the relevant XAML or config files
+          5. Create a file called REPORT.md in the root with these sections:
+             ## Issue Summary
+             - What the issue was and its root cause
+             ## Changes Made
+             - List every file changed and exactly what was changed
+             ## UiPath Analysis
+             - Findings from UiPath skill analysis (workflow structure, selectors, activities)
+             ## Testing Notes
+             - What to verify after the fix is applied
+             ## Risk Assessment
+             - Any risks or side effects of the change
+          6. Do NOT run git commit or git push
+
+          PROMPT
+            # Replace placeholder with actual task
+            sed -i "s|TASK_PLACEHOLDER|${TASK}|g" $GITHUB_ENV
+
+          else
+            cat >> $GITHUB_ENV << 'PROMPT'
+          PROMPT=You are an expert UiPath RPA developer and test automation engineer.
+
+          This is a UiPath test automation project that automates ServiceNow incident lifecycle testing via browser automation. All automation logic is in XAML workflows under Workflows/ and test cases under TestCases/. Use the UiPath skills available to you (uipath-rpa, uipath-test, uipath-review, uipath-troubleshoot) to analyse the entire project.
+
+          INSTRUCTIONS:
+          1. Use UiPath skills to analyse all XAML files in Workflows/ and TestCases/
+          2. Read project.json for version and dependency details
+          3. Review CLAUDE.md for project guidelines
+          4. Create ANALYSIS.md in the root with:
+             ## Project Overview
+             - Purpose, tech stack, UiPath version
+             ## Repository Structure
+             - Every folder and key file with a one-line description
+             ## Test Cases
+             - For each file in TestCases/, describe what scenario it tests
+             ## Workflows
+             - For each file in Workflows/, describe what it does
+             ## Dependencies
+             - Packages from project.json
+             ## Known Issues / Observations
+             - Anything missing, broken, or worth noting
+             ## Recommendations
+             - Suggested improvements
+          5. Do NOT run git commit or git push
+
+          PROMPT
+          fi
 
       # ── Run Claude ─────────────────────────────────────────────────────────
       - name: Run Claude
@@ -90,20 +158,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           additional_permissions: "actions: read"
-          prompt: |
-            Analyse this entire UiPath test automation repository and create a
-            file called ANALYSIS.md in the root directory.
-
-            ANALYSIS.md must contain:
-            1. Project Overview - what the project does, tech stack, UiPath version if detectable
-            2. Repository Structure - list every folder and key file with a one-line description
-            3. Test Cases - for each file in TestCases/, describe what scenario it tests
-            4. Workflows - for each file in Workflows/, describe what it does
-            5. Dependencies - list packages from project.json
-            6. Known Issues / Observations - anything missing, inconsistent, or worth noting
-            7. Recommendations - suggested improvements
-
-            Write the file only. Do NOT run git commit or git push.
+          prompt: ${{ env.PROMPT }}
           claude_args: "--max-turns 50 --permission-mode bypassPermissions"
 
       # ── Debug ──────────────────────────────────────────────────────────────
@@ -118,8 +173,8 @@ jobs:
           echo "===== Diff ====="
           git diff
           echo ""
-          echo "===== Repository Files ====="
-          find . -not -path './.git/*'
+          echo "===== New/Untracked Files ====="
+          git ls-files --others --exclude-standard
 
       # ── Check for Changes ──────────────────────────────────────────────────
       - name: Verify Claude Changes
@@ -141,20 +196,26 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: claude/${{ github.run_id }}
-          title: "Claude Code: Repository Analysis and Fix"
-          commit-message: "Claude repository analysis and automated fix"
+          title: >-
+            ${{ github.event_name == 'issue_comment'
+              && format('fix: Issue #{0} — {1}', github.event.issue.number, github.event.issue.title)
+              || 'docs: UiPath project analysis (ANALYSIS.md)' }}
+          commit-message: >-
+            ${{ github.event_name == 'issue_comment'
+              && format('fix(#{0}): Claude automated fix', github.event.issue.number)
+              || 'docs: add ANALYSIS.md project analysis' }}
           delete-branch: true
           body: |
-            ## Claude Code Automated Changes
+            ## Claude Code — Automated Fix
 
-            This PR was generated automatically by the Claude Code workflow.
+            | Field | Value |
+            |---|---|
+            | **Trigger** | `${{ github.event_name }}` |
+            | **Run** | `${{ github.run_id }}` |
+            ${{ github.event_name == 'issue_comment' && format('| **Issue** | #{0} {1} |', github.event.issue.number, github.event.issue.title) || '| **Task** | Repository analysis |' }}
 
-            **Included:**
-            - Repository analysis
-            - ANALYSIS.md
-            - Requested issue implementation
-            - Repository modifications
+            ${{ github.event_name == 'issue_comment' && '### Request' || '' }}
+            ${{ github.event_name == 'issue_comment' && github.event.comment.body || '' }}
 
-            **Trigger:** `${{ github.event_name }}`
-
-            ${{ github.event_name == 'issue_comment' && format('**Issue Comment:**{0}{1}', '%0A', github.event.comment.body) || '' }}
+            ---
+            > See **REPORT.md** (for issue fixes) or **ANALYSIS.md** (for analysis runs) in this PR for full details.
