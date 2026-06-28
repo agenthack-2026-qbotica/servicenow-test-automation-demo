@@ -141,7 +141,6 @@ jobs:
       # 8. Pack from PR branch
       - name: Pack UiPath project
         shell: powershell
-        shell: powershell
         run: |
           # Redirect NuGet package cache away from project dir to prevent .local conflict
           $env:NUGET_PACKAGES = "C:\nuget-cache"
@@ -273,5 +272,7 @@ jobs:
             await github.rest.pulls.merge({
               owner:        context.repo.owner,
               repo:         context.repo.repo,
+              pull_number:  ${{ needs.check-comment.outputs.pr_number }},
               merge_method: 'squash'
             });
+            console.log('PR #${{ needs.check-comment.outputs.pr_number }} merged into master.');
