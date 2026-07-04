@@ -1,0 +1,46 @@
+## Issue Summary
+
+**Issue #55 ("Test23"):** ServiceNow must refuse to resolve an incident when the **Resolution Notes** field is left empty — the state change to `Resolved` should be blocked, a validation message should be shown, and the incident must remain in its prior state.
+
+**User request:** The attached "JobError" text was the literal placeholder string `input.JobError`, not an actual Orchestrator job-error payload (no `Title`/`Detail`/`Code`/exception type/entry point). There was no real failure evidence to triage.
+
+**Root cause:** Two separate problems, found by walking the test suite with the `uipath-review`/`uipath-troubleshoot` skills:
+
+1. **No test coverage existed for the acceptance criteria at all.** `TestCases/` only goes up to `08_TC_OpenIncident.xaml`; nothing exercises "resolve an incident with empty Resolution Notes." The Object Repository (`.objects/_70W/XuB5/1IAJ/...`) already contains the UI elements needed for this flow (`Button_ResolutionInformation`, `Button_ResolutionCode`, the `Resolution notes` textarea, `Button_Resolve`, `Text_Resolved`), and they are used by `Workflows/04_HighPriorityWAssignGroup.xaml` / `05_HighPriorityWoAssignGroup.xaml` — but only in the "happy path" where notes **are** filled in before clicking Resolve. Nobody ever wired up the negative-path scenario the issue describes.
+
+2. **A stale, mislabeled test case that pointed at the wrong thing.** `TestCases/06_TC_UpdateCaller.xaml` — which actually just updates the incident's Caller field — still carried `x:Class="_06_CloseIncidentWoResolutionNotes"`, `DisplayName="_06_CloseIncidentWoResolutionNotes"`, and `IdRef="_06_CloseIncidentWoResolutionNotes_1"` (its underlying workflow, `Workflows/06_UpdateCaller.xaml`, is correctly named `_06_UpdateCaller`). This matches the stub name documented in `CLAUDE.md` ("`06_TC_CloseIncidentWoResolutionNotes.xaml` ... stub with empty Given/When/Then"), which confirms this test case began life as the Resolution-Notes stub and was later repurposed into the Update-Caller test without renaming its internal identifiers. A test case whose class/display name advertises "resolution notes" behavior while its body drives an unrelated "update caller" flow is exactly the kind of mismatch that produces uninterpretable JobErrors in Test Manager/CI — the wrong test would appear to run under the "resolution notes" name, and whatever it reported would have nothing to do with the actual scenario being investigated.
+
+## Changes Made
+
+| File | What changed |
+|---|---|
+| `Workflows/09_ResolveIncidentWithoutResolutionNotes.xaml` (new) | Reusable workflow: opens the fixture incident, opens the "Resolution Information" tab, selects a Resolution Code, **deliberately skips typing into "Resolution notes"**, then clicks "Resolve". Reuses the existing Object Repository references (`Button_ResolutionInformation`, `Button_ResolutionCode`, `Button_Resolve`) so the only variable relative to the existing happy-path workflows is the omitted notes entry. |
+| `TestCases/09_TC_ResolveIncidentWithoutResolutionNotes.xaml` (new) | Given/When/Then test case: **Given** logs in via `SNOW_Login.xaml`; **When** invokes the new workflow above; **Then** asserts (a) `Text_Resolved` is still empty (incident was NOT marked Resolved — criteria #4/#6), (b) the `Resolution notes` field is still empty (criteria #2), and (c) a validation message containing "required" is displayed near the Resolution Notes field (criteria #5), then logs out via `SNOW_Logout.xaml`. |
+| `TestCases/06_TC_UpdateCaller.xaml` | Fixed the mislabeled `x:Class`, root `Sequence` `DisplayName`, and `WorkflowViewState.IdRef` from the stale `_06_CloseIncidentWoResolutionNotes` to the correct `_06_UpdateCaller`, matching what the test case actually does and its underlying workflow's class name. |
+
+## UiPath Analysis
+
+- Confirmed via `uipath-rpa`/`uipath-review` conventions that every test case in this project follows the strict Given/When/Then structure (`SNOW_Login.xaml` → action workflow → assertion → `SNOW_Logout.xaml`), and that verification is done with `UiPath.Testing.Activities.VerifyControlAttribute` wrapping an `NGetText` against a `Home_Dashboard` `NApplicationCard`, exactly as in `TestCases/04_TC_HighPriorityWAssignGroup.xaml` and `05_TC_HighPriorityWoAssignGroup.xaml` (which verify the *positive* resolve case: `Text_Resolved != ""`). The new test case mirrors this pattern with the assertion polarity inverted (`Text_Resolved == ""`), since resolution should be blocked here.
+- The Object Repository app (`_BU5etMzk0KtDV4Hwc6ztw`) already had every element needed for the "attempt to resolve" half of this scenario, captured under the `Home_Dashboard` screen (`1IAJgRc-uECKmXeotj3r1Q`): `Button_ResolutionInformation`, `Button_ResolutionCode`, `Resolution notes` (input), `Button_Resolve`, and `Text_Resolved`. These are reused by reference rather than re-captured, keeping this change consistent with Studio's Object Repository sync behavior.
+- The one selector that could **not** be captured from the live PDI in this offline environment is the ServiceNow client-side mandatory-field validation message shown when Resolution Notes is empty on Resolve. A fuzzy, best-effort selector (`innertext='*Resolution notes*required*'` inside the `gsft_main` iframe) was used, based on ServiceNow's well-documented out-of-box "Incident resolution validation" business rule message. This activity has `ContinueOnFailure="True"` and screenshot-on-failure enabled so a live run will fail loudly (with evidence) rather than silently passing if the wording/selector needs adjustment.
+- The `TestCases/06_TC_UpdateCaller.xaml` mismatch is the more actionable "root cause" for the garbled JobError: if Test Manager or CI resolves a test run by the workflow's internal class/display name (`_06_CloseIncidentWoResolutionNotes`) rather than the file path, it would have been executing Update-Caller logic while believing it was running the Resolution-Notes scenario — producing a job result with no relationship to the actual test intent, and no interpretable error payload for a "resolution notes" story.
+
+## Testing Notes
+
+1. Open the project in **UiPath Studio** and confirm `TestCases/06_TC_UpdateCaller.xaml` now shows `_06_UpdateCaller` as its class/display name (Studio's Test Explorer should list it correctly, no longer confusingly labeled).
+2. Run `TestCases/09_TC_ResolveIncidentWithoutResolutionNotes.xaml` (Run > Run Test Case) against `https://dev181290.service-now.com`, using an incident number that is currently **not** resolved (default: `INC0010050`, matching the fixture used by TC04/TC05).
+3. Verify the three assertions in the "Then" block:
+   - `Text_Resolved` remains empty (incident stayed in its prior state).
+   - `Resolution notes` field remains empty (sanity check that we truly didn't fill it).
+   - The validation-message check — **this one should be manually captured in Studio's Object Repository on first live run.** If the exact wording/selector differs from `*Resolution notes*required*`, update the inline `FuzzySelectorArgument` in `TestCases/09_TC_ResolveIncidentWithoutResolutionNotes.xaml` (and consider promoting it to a proper Object Repository element under the `Home_Dashboard` screen) based on the failure screenshot.
+4. Re-run `TestCases/06_TC_UpdateCaller.xaml` end-to-end to confirm the class-name fix did not change its runtime behavior (it should still just update the Caller field and pass as before).
+5. Run `uip rpa get-errors --project-dir "."` once an authenticated CLI session is available (this sandbox could not reach Orchestrator to validate); this repo's CI/CD normally does this in `uipath-deploy.yml`.
+
+## Risk Assessment
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| ServiceNow's exact validation message text/selector differs from the fuzzy guess used here | Medium — could not be captured live in this environment | Low — only the third assertion is affected; the primary "incident not resolved" assertions do not depend on it | `ContinueOnFailure="True"` + failure screenshot isolates this one check; selector can be corrected from the screenshot without touching the other two assertions |
+| Renaming `x:Class`/`DisplayName`/`IdRef` in `06_TC_UpdateCaller.xaml` could affect Test Manager test-case linkage if Test Manager keyed off the old internal name | Low — `.tmh/config.json` shows `issueKeyTestcaseValues` is empty, so no recorded external linkage exists yet | Medium if a mapping is later added by name instead of path | Prefer path-based mapping in Test Manager going forward; flagged in this report for visibility |
+| New workflow reuses existing Object Repository selectors that could drift if ServiceNow's Resolution Information UI changes | Low — same selectors already relied upon by TC04/TC05 | Medium | No new fragility introduced; any future selector fix for those elements benefits this test too |
+| Test data: reruns against the same fixture incident (`INC0010050`) could leave the Resolution Code dropdown pre-selected from a previous run | Low | Low | Workflow re-selects Resolution Code every run via `NClick` + `NKeyboardShortcuts`, independent of prior state |
