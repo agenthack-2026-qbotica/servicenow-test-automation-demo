@@ -98,6 +98,12 @@
                                                          "testCaseId":  "7121d93b-d684-43bb-979b-9116166b0934",
                                                          "testCaseType":  "TestCase",
                                                          "fileName":  "TestCases\\07_TC_ChangePriorityAndUpdateCaller.xaml"
+                                                     },
+                                                     {
+                                                         "editingStatus":  "Publishable",
+                                                         "testCaseId":  "a9576902-e712-4421-9d55-bbcb94437a23",
+                                                         "testCaseType":  "TestCase",
+                                                         "fileName":  "TestCases\\09_TC_ResolveIncidentWithoutResolutionNotes.xaml"
                                                      }
                                                  ],
                           "saveToCloud":  false
