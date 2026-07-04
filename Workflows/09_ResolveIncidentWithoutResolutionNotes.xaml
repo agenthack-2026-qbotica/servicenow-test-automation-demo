@@ -1,0 +1,217 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="SNOW_ResolveIncidentWithoutResolutionNotes" this:SNOW_ResolveIncidentWithoutResolutionNotes.in_str_IncidentNumber="INC0010050" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing.Common" xmlns:sd1="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_str_IncidentNumber" Type="InArgument(x:String)" />
+    <x:Property Name="in_Ui_Element" Type="InArgument(ui:UiElement)" />
+  </x:Members>
+  <this:SNOW_ResolveIncidentWithoutResolutionNotes.in_Ui_Element>
+    <InArgument x:TypeArguments="ui:UiElement" />
+  </this:SNOW_ResolveIncidentWithoutResolutionNotes.in_Ui_Element>
+  <VisualBasic.Settings>
+    <x:Null />
+  </VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>SNOW_ResolveIncidentWithoutResolutionNotes_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>UiPath.UIAutomationNext.Enums</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Models</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>UiPath.Platform.ObjectLibrary</x:String>
+      <x:String>UiPath.Platform.SyncObjects</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>UiPath.UIAutomationNext.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Models.CV</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Linq.Expressions</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities.Models</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.TypeConverter</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.Linq</AssemblyReference>
+      <AssemblyReference>System.Net.Mail</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Formatters</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization.Primitives</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Testing.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>System.Security.Permissions</AssemblyReference>
+      <AssemblyReference>System.Runtime.InteropServices</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.EventBasedAsync</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>System.ComponentModel</AssemblyReference>
+      <AssemblyReference>System.Reflection.DispatchProxy</AssemblyReference>
+      <AssemblyReference>System.Reflection.TypeExtensions</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Console</AssemblyReference>
+      <AssemblyReference>System.Configuration.ConfigurationManager</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>System.Private.Uri</AssemblyReference>
+      <AssemblyReference>System.Collections</AssemblyReference>
+      <AssemblyReference>System.Collections.NonGeneric</AssemblyReference>
+      <AssemblyReference>System.Linq.Expressions</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities.Design</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>NPOI.Core</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Primitives</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="SNOW_ResolveIncidentWithoutResolutionNotes" sap:VirtualizedContainerService.HintSize="920.6666666666666,1652" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <uix:NApplicationCard AttachMode="ByInstance" CloseMode="[UiPath.UIAutomationNext.Enums.NAppCloseMode.Never]" DisplayName="Home_Dashboard" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="488,1629.3333333333333" sap2010:WorkflowViewState.IdRef="NApplicationCard_1" InUiElement="[in_Ui_Element]" InteractionMode="DebuggerApi" OpenMode="[UiPath.UIAutomationNext.Enums.NAppOpenMode.Never]" ScopeGuid="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Version="V2">
+      <uix:NApplicationCard.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="486,1507.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" ClipboardMode="Never" DisplayName="Type Into 'Input_HomeSearch'" EmptyFieldMode="SingleLine" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="452,57.333333333333336" sap2010:WorkflowViewState.IdRef="NTypeInto_1" ScopeIdentifier="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Text="[in_str_IncidentNumber]" Version="V5">
+              <uix:NTypeInto.Target>
+                <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/ui_page.do%3Fsys_id%3D9068967483a903100e66c2dfeeaad378" ContentHash="zSNySMKcbE-2YAqM0p35lg" DesignTimeRectangle="1199, 146, 265, 48" ElementType="InputBox" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl shadowhostid='' tag='SN-SEARCH-INPUT-WRAPPER' /&gt;&lt;webctrl shadowhostid='' tag='SN-COMPONENT-WORKSPACE-GLOBAL-SEARCH-TYPEAHEAD' /&gt;&lt;webctrl id='*input' shadowhostid='' tag='INPUT' aria-label='Search' /&gt;" Guid="46547cb5-f205-4ab1-b9a4-b9d09e3cb298" InformativeScreenshot="ae426a8f34815a9694e5b7044106fd5e.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/29IbmG8JFU2bodd4lZT47w" ScopeSelectorArgument="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
+              </uix:NTypeInto.Target>
+              <uix:NTypeInto.VerifyOptions>
+                <uix:VerifyExecutionTypeIntoOptions Mode="Appears">
+                  <uix:VerifyExecutionTypeIntoOptions.Retry>
+                    <InArgument x:TypeArguments="x:Boolean" />
+                  </uix:VerifyExecutionTypeIntoOptions.Retry>
+                  <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                    <InArgument x:TypeArguments="x:Double" />
+                  </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                </uix:VerifyExecutionTypeIntoOptions>
+              </uix:NTypeInto.VerifyOptions>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </uix:NTypeInto>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="3" DisplayName="Click 'Link_SelectIncident'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="452,195.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_1" InteractionMode="Simulate" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Version="V5">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_stack%3D%26sysparm_view%3D" ContentHash="vk-70rHAykSVCTNBBrcnxA" DesignTimeRectangle="1061, 251, 484, 105" ElementType="ListItem" ElementVisibilityArgument="Interactive" FullSelectorArgument="[string.Format(&quot;&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-LAYOUT' /&gt;&lt;webctrl shadowhostid='' tag='SN-POLARIS-HEADER' /&gt;&lt;webctrl shadowhostid='' tag='SN-SEARCH-INPUT-WRAPPER' /&gt;&lt;webctrl shadowhostid='' tag='SN-COMPONENT-WORKSPACE-GLOBAL-SEARCH-TYPEAHEAD' /&gt;&lt;webctrl shadowhostid='' tag='LI' visibleinnertext='*Number: {0}*' /&gt;&quot;, in_str_IncidentNumber)]" Guid="927a6ef1-2453-42c4-a3a3-a3941d44ba99" InformativeScreenshot="087e65fd049515802d8222e527b90389.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/4PoXoJX8ZUGBfRSLbPc1uw" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
+              </uix:NClick.Target>
+            </uix:NClick>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="1" DisplayName="Click 'Button_ResolutionInformation'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="452,195.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_2" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Version="V5">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="fcvK2DynK0ydBdxHcNawdw" DesignTimeRectangle="299, 599, 259, 54" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl aria-role='tab' tag='SPAN' innertext='*Resolution Information' visibleinnertext='*Resolution Information' /&gt;" Guid="8050511a-56fd-490c-8533-d229e0f660f9" InformativeScreenshot="3e86f6d18790e6d3de33a5eac715c013.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/Z0HzYTW31kCoG9CX3oeTjA" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
+              </uix:NClick.Target>
+            </uix:NClick>
+            <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="1" DelayBefore="1" DisplayName="Click 'Button_ResolutionCode'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="452,195.33333333333334" sap2010:WorkflowViewState.IdRef="NClick_3" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Version="V5">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="IhfxtMATBU2ANO_D1S7Lcw" DesignTimeRectangle="357, 583, 356, 48" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='SELECT' type='' class='form-control' matching:class='fuzzy' fuzzylevel:class='0.0' aaname='Resolution code' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' /&gt;" Guid="337b973c-3682-4925-97ad-4fcf45eb2602" InformativeScreenshot="faa002558e1e4761e34eff7f4ac77073.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/r86rbso6n067i-SoSkJL_w" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*Incident | ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="1">
+                      <uix:Target DesignTimeRectangle="33, 583, 309, 38" ElementType="Text" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='LABEL' innertext='Resolution code' check:innerText='Resolution code' /&gt;" Guid="0538c9d6-29df-41d8-a78f-0ea214d9833a" SearchSteps="FuzzySelector" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NClick.Target>
+            </uix:NClick>
+            <uix:NKeyboardShortcuts ActivateBefore="True" ClickBeforeMode="None" DisplayName="Keyboard Shortcuts 'Button_ResolutionCode'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="452,57.333333333333336" sap2010:WorkflowViewState.IdRef="NKeyboardShortcuts_1" InteractionMode="HardwareEvents" ScopeIdentifier="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Shortcuts="[d(hk)][k(Down)][u(hk)][d(hk)][k(Down)][u(hk)][d(hk)][k(Down)][u(hk)][d(hk)][k(Down)][u(hk)][d(hk)][k(Down)][u(hk)][d(hk)][k(Down)][u(hk)][d(hk)][k(Down)][u(hk)]" Version="V5">
+              <uix:NKeyboardShortcuts.Target>
+                <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="IhfxtMATBU2ANO_D1S7Lcw" DesignTimeRectangle="357, 583, 356, 48" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='SELECT' type='' class='form-control' matching:class='fuzzy' fuzzylevel:class='0.0' aaname='Resolution code' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' /&gt;" Guid="337b973c-3682-4925-97ad-4fcf45eb2602" InformativeScreenshot="faa002558e1e4761e34eff7f4ac77073.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/r86rbso6n067i-SoSkJL_w" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*Incident | ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="Interactive">
+                  <uix:TargetAnchorable.Anchors>
+                    <scg:List x:TypeArguments="uix:ITarget" Capacity="1">
+                      <uix:Target DesignTimeRectangle="33, 583, 309, 38" ElementType="Text" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='LABEL' innertext='Resolution code' check:innerText='Resolution code' /&gt;" Guid="0538c9d6-29df-41d8-a78f-0ea214d9833a" SearchSteps="FuzzySelector" />
+                    </scg:List>
+                  </uix:TargetAnchorable.Anchors>
+                </uix:TargetAnchorable>
+              </uix:NKeyboardShortcuts.Target>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </uix:NKeyboardShortcuts>
+            <ui:LogMessage DisplayName="Logs that Resolution notes is deliberately left empty" sap:VirtualizedContainerService.HintSize="452,167.33333333333334" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="&quot;Deliberately skipping Resolution notes entry to verify ServiceNow blocks Resolve when the field is empty.&quot;" />
+            <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="5" DelayBefore="1" DisplayName="Click 'Resolve'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="452,186" sap2010:WorkflowViewState.IdRef="NClick_4" InteractionMode="Simulate" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="7d9a2c31-9f6e-4a58-8e33-2f6a2c6f9c11" Version="V5">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="yGeNEdUEEEqVIkMs2T6-2A" DesignTimeRectangle="1568, 218, 105, 48" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl aaname='Resolve' tag='BUTTON' type='submit' /&gt;" Guid="c6f808ea-e57f-4be0-ad97-959171c85885" InformativeScreenshot="48a4d8560b436f53728ad4cd4e71176b.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/ZOumMXmFJE66n1OD_SkPew" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
+              </uix:NClick.Target>
+            </uix:NClick>
+          </Sequence>
+        </ActivityAction>
+      </uix:NApplicationCard.Body>
+      <uix:NApplicationCard.OCREngine>
+        <ActivityFunc x:TypeArguments="sd:Image, scg:IEnumerable(scg:KeyValuePair(sd1:Rectangle, x:String))">
+          <ActivityFunc.Argument>
+            <DelegateInArgument x:TypeArguments="sd:Image" Name="Image" />
+          </ActivityFunc.Argument>
+        </ActivityFunc>
+      </uix:NApplicationCard.OCREngine>
+      <uix:NApplicationCard.TargetApp>
+        <uix:TargetApp Area="-11, -11, 1942, 1150" BrowserType="Edge" ContentHash="SZET9DGjRE228UEVDBw_1Q" InformativeScreenshot="77d0af43f2d3f72543b7bac92dc1e5ee.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/1IAJgRc-uECKmXeotj3r1Q" Selector="&lt;html app='msedge.exe' title='ServiceNow' /&gt;" Url="https://dev181290.service-now.com/*" Version="V3">
+          <uix:TargetApp.Arguments>
+            <InArgument x:TypeArguments="x:String" />
+          </uix:TargetApp.Arguments>
+          <uix:TargetApp.WorkingDirectory>
+            <InArgument x:TypeArguments="x:String" />
+          </uix:TargetApp.WorkingDirectory>
+        </uix:TargetApp>
+      </uix:NApplicationCard.TargetApp>
+    </uix:NApplicationCard>
+  </Sequence>
+</Activity>
