@@ -235,7 +235,7 @@
                       </scg:Dictionary>
                     </sap:WorkflowViewStateService.ViewState>
                   </uix:NKeyboardShortcuts>
-                  <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" ClipboardMode="Never" DelayBefore="1" DisplayName="Type Into 'Resolution notes'" EmptyFieldMode="SingleLine" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,248" sap2010:WorkflowViewState.IdRef="NTypeInto_6" InteractionMode="DebuggerApi" ScopeIdentifier="63de61a6-d17c-4e4a-b7f6-2cb30ab921d3" Text="Incident has High Priority and Assignment Group is not Empty." Version="V5">
+                  <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" ClipboardMode="Never" DelayAfter="2" DelayBefore="1" DisplayName="Type Into 'Resolution notes'" EmptyFieldMode="SingleLine" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,248" sap2010:WorkflowViewState.IdRef="NTypeInto_6" InteractionMode="DebuggerApi" ScopeIdentifier="63de61a6-d17c-4e4a-b7f6-2cb30ab921d3" Text="Incident has High Priority and Assignment Group is not Empty." Version="V5">
                     <uix:NTypeInto.Target>
                       <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="qB78aw9_ck-AeVN9bd3WHA" DesignTimeRectangle="357, 642, 1282, 96" ElementType="InputBox" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' matching:id='fuzzy' fuzzylevel:id='0.0' shadowhostid='' matching:shadowhostid='fuzzy' fuzzylevel:shadowhostid='0.0' tag='IFRAME' /&gt;&lt;webctrl tag='TEXTAREA' class='form-control no-scroll-width' matching:class='fuzzy' fuzzylevel:class='0.0' aaname='Resolution notes' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' /&gt;" Guid="667c0f99-2a26-4699-a05a-2ef6c3521878" InformativeScreenshot="0ae2a0654735a64c9ffed1f18d7c34d3.jpg" IsResponsive="True" Reference="_BU5etMzk0KtDV4Hwc6ztw/x1LAqj6110eFoTijJgh83A" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*Incident | ServiceNow' /&gt;" SearchSteps="FuzzySelector" Version="V6" WaitForReadyArgument="Interactive">
                         <uix:TargetAnchorable.Anchors>
@@ -246,11 +246,25 @@
                       </uix:TargetAnchorable>
                     </uix:NTypeInto.Target>
                   </uix:NTypeInto>
-                  <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="5" DelayBefore="1" DisplayName="Click 'Resolve'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,186" sap2010:WorkflowViewState.IdRef="NClick_4" InteractionMode="Simulate" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="63de61a6-d17c-4e4a-b7f6-2cb30ab921d3" Version="V5">
-                    <uix:NClick.Target>
+                  <uix:NCheckState DisplayName="Check App State 'Button_Resolve'" HealingAgentBehavior="Disabled" sap:VirtualizedContainerService.HintSize="416,57.333333333333336" sap2010:WorkflowViewState.IdRef="NCheckState_1" ScopeIdentifier="63de61a6-d17c-4e4a-b7f6-2cb30ab921d3" Timeout="30" Version="V5">
+                    <uix:NCheckState.IfExists>
+                      <Sequence DisplayName="Resolve button is enabled" sap:VirtualizedContainerService.HintSize="450,246" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                        <uix:NClick ActivateBefore="True" ClickType="Single" DelayAfter="5" DelayBefore="1" DisplayName="Click 'Resolve'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,186" sap2010:WorkflowViewState.IdRef="NClick_4" InteractionMode="Simulate" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="63de61a6-d17c-4e4a-b7f6-2cb30ab921d3" Version="V5">
+                          <uix:NClick.Target>
+                            <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="yGeNEdUEEEqVIkMs2T6-2A" DesignTimeRectangle="1568, 218, 105, 48" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl aaname='Resolve' tag='BUTTON' type='submit' /&gt;" Guid="c6f808ea-e57f-4be0-ad97-959171c85885" InformativeScreenshot="48a4d8560b436f53728ad4cd4e71176b.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/ZOumMXmFJE66n1OD_SkPew" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
+                          </uix:NClick.Target>
+                        </uix:NClick>
+                      </Sequence>
+                    </uix:NCheckState.IfExists>
+                    <uix:NCheckState.IfNotExists>
+                      <Sequence DisplayName="Resolve button did not become enabled" sap:VirtualizedContainerService.HintSize="450,227.33333333333334" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                        <ui:LogMessage DisplayName="Log Resolve button not enabled within timeout" Level="Warn" Message="[&quot;Resolve button did not become enabled within 30s - required fields (e.g. Resolution code/notes) may be incomplete.&quot;]" />
+                      </Sequence>
+                    </uix:NCheckState.IfNotExists>
+                    <uix:NCheckState.Target>
                       <uix:TargetAnchorable BrowserURL="dev181290.service-now.com/now/nav/ui/classic/params/target/incident.do%3Fsys_id%3D4a1658fe8329c7100e66c2dfeeaad3f1%26sysparm_view%3Dtext_search" ContentHash="yGeNEdUEEEqVIkMs2T6-2A" DesignTimeRectangle="1568, 218, 105, 48" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='MACROPONENT-F51912F4C700201072B211D4D8C26010' /&gt;&lt;webctrl id='gsft_main' shadowhostid='' tag='IFRAME' /&gt;&lt;webctrl aaname='Resolve' tag='BUTTON' type='submit' /&gt;" Guid="c6f808ea-e57f-4be0-ad97-959171c85885" InformativeScreenshot="48a4d8560b436f53728ad4cd4e71176b.jpg" Reference="_BU5etMzk0KtDV4Hwc6ztw/ZOumMXmFJE66n1OD_SkPew" ScopeSelectorArgument="&lt;html app='msedge.exe' title='*ServiceNow' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
-                    </uix:NClick.Target>
-                  </uix:NClick>
+                    </uix:NCheckState.Target>
+                  </uix:NCheckState>
                 </Sequence>
               </If.Then>
               <If.Else>
